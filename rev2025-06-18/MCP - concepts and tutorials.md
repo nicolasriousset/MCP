@@ -27,25 +27,21 @@ AI-enabled tools are powerful, but they’re often limited to the information yo
 
 Whether it’s reading files from your computer, searching through an internal or external knowledge base, or updating tasks in an project management tool, MCP provides a secure, standardized, *simple* way to give AI systems the context they need.
 
-
-
 ## How it works
 
-**1 Choose MCP servers**
+### 1. Choose MCP servers
 
 Pick from pre-built servers for popular tools like GitHub, Google Drive, Slack and hundreds of others. Combine multiple servers for complete workflows, or easily build your own for custom integrations.
 
-**2 Connect your AI application**
+### 2. Connect your AI application
 
 Configure your AI application (like Claude, VS Code, or ChatGPT) to connect to your MCP servers. The application can now see available tools, resources and prompts from all connected servers.
 
-**3 Work with context**
+### 3. Work with context
 
 Your AI-powered application can now access real data, execute actions, and provide more helpful responses based on your actual context.
 
-# Documentation
-
-## Introduction
+# Introduction
 
 > Get started with the Model Context Protocol (MCP)
 
@@ -58,7 +54,7 @@ MCP provides:
 * **An open protocol** that everyone is free to implement and use
 * **The flexibility to change** between different apps and take your context with you
 
-### Choose Your Path
+## Choose Your Path
 
 <CardGroup cols={2}>
   <Card title="Understand Concepts" icon="book" href="/docs/learn/architecture">
@@ -82,17 +78,17 @@ MCP provides:
   </Card>
 </CardGroup>
 
-### Ready to Build?
+## Ready to Build?
 
 MCP provides official **SDKs** in multiple languages, see the [SDK documentation](/docs/sdk) to find the right SDK for your project. The SDKs handle the protocol details so you can focus on building your features.
 
-## SDKs
+# SDKs
 
 > Official SDKs for building with the Model Context Protocol
 
 Build MCP servers and clients using our official SDKs. Choose the SDK that matches your technology stack - all SDKs provide the same core functionality and full protocol support.
 
-### Available SDKs
+## Available SDKs
 
 <CardGroup cols={3}>
   <Card title="TypeScript" icon="square-js" href="https://github.com/modelcontextprotocol/typescript-sdk" />
@@ -114,7 +110,7 @@ Build MCP servers and clients using our official SDKs. Choose the SDK that match
   <Card title="Rust" icon="rust" href="https://github.com/modelcontextprotocol/rust-sdk" />
 </CardGroup>
 
-### Getting Started
+## Getting Started
 
 Each SDK provides the same functionality but follows the idioms and best practices of its language. All SDKs support:
 
@@ -125,7 +121,7 @@ Each SDK provides the same functionality but follows the idioms and best practic
 
 Visit the SDK page for your chosen language to find installation instructions, documentation, and examples.
 
-### Next Steps
+## Next Steps
 
 Ready to start building with MCP? Choose your path:
 
@@ -146,6 +142,8 @@ Ready to start building with MCP? Choose your path:
     Dive deeper into how MCP works
   </Card>
 </CardGroup>
+
+# Concepts
 
 ## Architecture Overview
 
@@ -182,7 +180,8 @@ The key participants in the MCP architecture are:
 * **MCP Server**: A program that provides context to MCP clients
 
 **For example**: Visual Studio Code acts as an MCP host. When Visual Studio Code establishes a connection to an MCP server, such as the [Sentry MCP server](https://docs.sentry.io/product/sentry-mcp/), the Visual Studio Code runtime instantiates an MCP client object that maintains the connection to the Sentry MCP server.
-When Visual Studio Code subsequently connects to another MCP server, such as the [local filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem), the Visual Studio Code runtime instantiates an additional MCP client object to maintain this connection, hence maintaining a one-to-one relationship of MCP clients to MCP servers.
+When Visual Studio Code subsequently connects to another MCP server, such as the [local filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem), the Visual Studio Code runtime instantiates an additional MCP client object to maintain this connection, hence maintaining a one-to-one
+relationship of MCP clients to MCP servers.
 
 ```mermaid
 graph TB
@@ -208,8 +207,15 @@ graph TB
     style Server3 fill:#f3e5f5
 ```
 
-Note that **MCP server** refers to the program that serves context data, regardless of where it runs. MCP servers can execute locally or remotely. For example, when Claude Desktop launches the [filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem), the server runs locally on the same machine because it uses the STDIO transport. This is commonly referred to as a "local" MCP server. The official
-[Sentry MCP server](https://docs.sentry.io/product/sentry-mcp/) runs on the Sentry platform, and uses the Streamable HTTP transport. This is commonly referred to as a "remote" MCP server.
+Note that **MCP server** refers to the program that serves context data, regardless of
+where it runs. MCP servers can execute locally or remotely. For example, when
+Claude Desktop launches the [filesystem
+server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem),
+the server runs locally on the same machine because it uses the STDIO
+transport. This is commonly referred to as a "local" MCP server. The official
+[Sentry MCP server](https://docs.sentry.io/product/sentry-mcp/) runs on the
+Sentry platform, and uses the Streamable HTTP transport. This is commonly
+referred to as a "remote" MCP server.
 
 #### Layers
 
@@ -286,11 +292,12 @@ The protocol supports real-time notifications to enable dynamic updates between 
 
 This section provides a step-by-step walkthrough of an MCP client-server interaction, focusing on the data layer protocol. We'll demonstrate the lifecycle sequence, tool operations, and notifications using JSON-RPC 2.0 messages.
 
-##### Initialization (Lifecycle Management)
+<Steps>
+  <Step title="Initialization (Lifecycle Management)">
     MCP begins with lifecycle management through a capability negotiation handshake. As described in the [lifecycle management](#lifecycle-management) section, the client sends an `initialize` request to establish the connection and negotiate supported features.
 
-
-    ```json Request
+    <CodeGroup>
+      ```json Request
       {
         "jsonrpc": "2.0",
         "id": 1,
@@ -306,9 +313,9 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
           }
         }
       }
-    ```
+      ```
     
-    ```json Response
+      ```json Response
       {
         "jsonrpc": "2.0",
         "id": 1,
@@ -326,11 +333,10 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
           }
         }
       }
-    ```
-
-
-​    
-    ###### Understanding the Initialization Exchange
+      ```
+    </CodeGroup>
+    
+    ##### Understanding the Initialization Exchange
     
     The initialization process is a key part of MCP's lifecycle management and serves several critical purposes:
     
@@ -360,12 +366,12 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     }
     ```
     
-    ###### How This Works in AI Applications
+    ##### How This Works in AI Applications
     
     During initialization, the AI application's MCP client manager establishes connections to configured servers and stores their capabilities for later use. The application uses this information to determine which servers can provide specific types of functionality (tools, resources, prompts) and whether they support real-time updates.
     
     ```python Pseudo-code for AI application initialization
-    ## Pseudo Code
+    # Pseudo Code
     async with stdio_client(server_config) as (read, write):
         async with ClientSession(read, write) as session:
             init_response = await session.initialize()
@@ -373,11 +379,12 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
                 app.register_mcp_server(session, supports_tools=True)
             app.set_server_ready(session)
     ```
+  </Step>
 
-  ##### Tool Discovery (Primitives)
+  <Step title="Tool Discovery (Primitives)">
     Now that the connection is established, the client can discover available tools by sending a `tools/list` request. This request is fundamental to MCP's tool discovery mechanism — it allows clients to understand what tools are available on the server before attempting to use them.
 
-
+    <CodeGroup>
       ```json Request
       {
         "jsonrpc": "2.0",
@@ -432,14 +439,13 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
         }
       }
       ```
-
-
-​    
-    ###### Understanding the Tool Discovery Request
+    </CodeGroup>
+    
+    ##### Understanding the Tool Discovery Request
     
     The `tools/list` request is simple, containing no parameters.
     
-    ###### Understanding the Tool Discovery Response
+    ##### Understanding the Tool Discovery Response
     
     The response contains a `tools` array that provides comprehensive metadata about each available tool. This array-based structure allows servers to expose multiple tools simultaneously while maintaining clear boundaries between different functionalities.
     
@@ -450,28 +456,28 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     * **`description`**: Detailed explanation of what the tool does and when to use it
     * **`inputSchema`**: A JSON Schema that defines the expected input parameters, enabling type validation and providing clear documentation about required and optional parameters
     
-    ###### How This Works in AI Applications
+    ##### How This Works in AI Applications
     
     The AI application fetches available tools from all connected MCP servers and combines them into a unified tool registry that the language model can access. This allows the LLM to understand what actions it can perform and automatically generates the appropriate tool calls during conversations.
     
     ```python Pseudo-code for AI application tool discovery
-    ## Pseudo-code using MCP Python SDK patterns
+    # Pseudo-code using MCP Python SDK patterns
     available_tools = []
     for session in app.mcp_server_sessions():
         tools_response = await session.list_tools()
         available_tools.extend(tools_response.tools)
     conversation.register_available_tools(available_tools)
     ```
+  </Step>
 
-  ##### Tool Execution (Primitives)
+  <Step title="Tool Execution (Primitives)">
     The client can now execute a tool using the `tools/call` method. This demonstrates how MCP primitives are used in practice: after discovering available tools, the client can invoke them with appropriate arguments.
 
-    ###### Understanding the Tool Execution Request
+    ##### Understanding the Tool Execution Request
     
     The `tools/call` request follows a structured format that ensures type safety and clear communication between client and server. Note that we're using the proper tool name from the discovery response (`weather_current`) rather than a simplified name:
-
-
-​    
+    
+    <CodeGroup>
       ```json Request
       {
         "jsonrpc": "2.0",
@@ -501,10 +507,9 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
         }
       }
       ```
-
-
-​    
-    ###### Key Elements of Tool Execution
+    </CodeGroup>
+    
+    ##### Key Elements of Tool Execution
     
     The request structure includes several important components:
     
@@ -517,7 +522,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     
     3. **JSON-RPC Structure**: Uses standard JSON-RPC 2.0 format with unique `id` for request-response correlation.
     
-    ###### Understanding the Tool Execution Response
+    ##### Understanding the Tool Execution Response
     
     The response demonstrates MCP's flexible content system:
     
@@ -529,22 +534,23 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     
     This execution pattern allows AI applications to dynamically invoke server functionality and receive structured responses that can be integrated into conversations with language models.
     
-    ###### How This Works in AI Applications
+    ##### How This Works in AI Applications
     
     When the language model decides to use a tool during a conversation, the AI application intercepts the tool call, routes it to the appropriate MCP server, executes it, and returns the results back to the LLM as part of the conversation flow. This enables the LLM to access real-time data and perform actions in the external world.
     
     ```python
-    ## Pseudo-code for AI application tool execution
+    # Pseudo-code for AI application tool execution
     async def handle_tool_call(conversation, tool_name, arguments):
         session = app.find_mcp_session_for_tool(tool_name)
         result = await session.call_tool(tool_name, arguments)
         conversation.add_tool_result(result.content)
     ```
+  </Step>
 
-  ##### Real-time Updates (Notifications)
+  <Step title="Real-time Updates (Notifications)">
     MCP supports real-time notifications that enable servers to inform clients about changes without being explicitly requested. This demonstrates the notification system, a key feature that keeps MCP connections synchronized and responsive.
 
-    ###### Understanding Tool List Change Notifications
+    ##### Understanding Tool List Change Notifications
     
     When the server's available tools change—such as when new functionality becomes available, existing tools are modified, or tools become temporarily unavailable—the server can proactively notify connected clients:
     
@@ -555,7 +561,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     }
     ```
     
-    ###### Key Features of MCP Notifications
+    ##### Key Features of MCP Notifications
     
     1. **No Response Required**: Notice there's no `id` field in the notification. This follows JSON-RPC 2.0 notification semantics where no response is expected or sent.
     
@@ -563,7 +569,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     
     3. **Event-Driven**: The server decides when to send notifications based on internal state changes, making MCP connections dynamic and responsive.
     
-    ###### Client Response to Notifications
+    ##### Client Response to Notifications
     
     Upon receiving this notification, the client typically reacts by requesting the updated tool list. This creates a refresh cycle that keeps the client's understanding of available tools current:
     
@@ -575,7 +581,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     }
     ```
     
-    ###### Why Notifications Matter
+    ##### Why Notifications Matter
     
     This notification system is crucial for several reasons:
     
@@ -586,22 +592,24 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     
     This notification pattern extends beyond tools to other MCP primitives, enabling comprehensive real-time synchronization between clients and servers.
     
-    ###### How This Works in AI Applications
+    ##### How This Works in AI Applications
     
     When the AI application receives a notification about changed tools, it immediately refreshes its tool registry and updates the LLM's available capabilities. This ensures that ongoing conversations always have access to the most current set of tools, and the LLM can dynamically adapt to new functionality as it becomes available.
     
     ```python
-    ## Pseudo-code for AI application notification handling
+    # Pseudo-code for AI application notification handling
     async def handle_tools_changed_notification(session):
         tools_response = await session.list_tools()
         app.update_available_tools(session, tools_response.tools)
         if app.conversation.is_active():
             app.conversation.notify_llm_of_new_capabilities()
     ```
+  </Step>
+</Steps>
 
 ## Server Concepts
 
-### Understanding MCP server concepts
+> Understanding MCP server concepts
 
 MCP servers are programs that expose specific capabilities to AI applications through standardized protocol interfaces. Each server provides focused functionality for a particular domain.
 
@@ -1086,12 +1094,19 @@ The **current** protocol version is [**2025-06-18**](/specification/2025-06-18/)
 ### Negotiation
 
 Version negotiation happens during
-[initialization](/specification/2025-06-18/basic/lifecycle#initialization). Clients and servers **MAY** support multiple protocol versions simultaneously, but they **MUST**
+[initialization](/specification/2025-06-18/basic/lifecycle#initialization). Clients and
+servers **MAY** support multiple protocol versions simultaneously, but they **MUST**
 agree on a single version to use for the session.
 
-The protocol provides appropriate error handling if version negotiation fails, allowing clients to gracefully terminate connections when they cannot find a version compatible with the server.
+The protocol provides appropriate error handling if version negotiation fails, allowing
+clients to gracefully terminate connections when they cannot find a version compatible
+with the server.
 
-## Connect to Remote MCP Servers
+# Tutorials
+
+## Using MCP
+
+### Connect to Remote MCP Servers
 
 > Learn how to connect Claude to remote MCP servers and extend its capabilities with internet-hosted tools and data sources
 
@@ -1099,13 +1114,13 @@ Remote MCP servers extend AI applications' capabilities beyond your local enviro
 
 Many clients now support remote MCP servers, enabling a wide range of integration possibilities. This guide demonstrates how to connect to remote MCP servers using [Claude](https://claude.ai/) as an example, one of the [many clients that support MCP](/clients). While we focus on Claude's implementation through Custom Connectors, the concepts apply broadly to other MCP-compatible clients.
 
-### Understanding Remote MCP Servers
+#### Understanding Remote MCP Servers
 
 Remote MCP servers function similarly to local MCP servers but are hosted on the internet rather than your local machine. They expose tools, prompts, and resources that Claude can use to perform tasks on your behalf. These servers can integrate with various services such as project management tools, documentation systems, code repositories, and any other API-enabled service.
 
 The key advantage of remote MCP servers is their accessibility. Unlike local servers that require installation and configuration on each device, remote servers are available from any MCP client with an internet connection. This makes them ideal for web-based AI applications, integrations that emphasize ease-of-use and services that require server-side processing or authentication.
 
-### What are Custom Connectors?
+#### What are Custom Connectors?
 
 Custom Connectors serve as the bridge between Claude and remote MCP servers. They allow you to connect Claude directly to the tools and data sources that matter most to your workflows, enabling Claude to operate within your favorite software and draw insights from the complete context of your external tools.
 
@@ -1114,7 +1129,7 @@ With Custom Connectors, you can:
 * [Connect Claude to existing remote MCP servers](https://support.anthropic.com/en/articles/11175166-getting-started-with-custom-connectors-using-remote-mcp) provided by third-party developers
 * [Build your own remote MCP servers to connect with any tool](https://support.anthropic.com/en/articles/11503834-building-custom-connectors-via-remote-mcp-servers)
 
-### Connecting to a Remote MCP Server
+#### Connecting to a Remote MCP Server
 
 The process of connecting Claude to a remote MCP server involves adding a Custom Connector through the [Claude interface](https://claude.ai/). This establishes a secure connection between Claude and your chosen remote server.
 
@@ -1176,7 +1191,7 @@ The process of connecting Claude to a remote MCP server involves adding a Custom
   </Step>
 </Steps>
 
-### Best Practices for Using Remote MCP Servers
+#### Best Practices for Using Remote MCP Servers
 
 When working with remote MCP servers, consider these recommendations to ensure a secure and efficient experience:
 
@@ -1184,7 +1199,7 @@ When working with remote MCP servers, consider these recommendations to ensure a
 
 **Managing multiple connectors**: You can connect to multiple remote MCP servers simultaneously. Organize your connectors by purpose or project to maintain clarity. Regularly review and remove connectors you no longer use to keep your workspace organized and secure.
 
-### Next Steps
+#### Next Steps
 
 Now that you've connected Claude to a remote MCP server, you can explore its capabilities in your conversations. Try using the connected tools to automate tasks, access external data, or integrate with your existing workflows.
 
@@ -1210,7 +1225,7 @@ Now that you've connected Claude to a remote MCP server, you can explore its cap
 
 Remote MCP servers unlock powerful possibilities for extending Claude's capabilities. As you become familiar with these integrations, you'll discover new ways to streamline your workflows and accomplish complex tasks more efficiently.
 
-## Connect to Local MCP Servers
+### Connect to Local MCP Servers
 
 > Learn how to extend Claude Desktop with local MCP servers to enable file system access and other powerful integrations
 
@@ -1222,17 +1237,17 @@ This guide demonstrates how to connect to local MCP servers using Claude Desktop
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-filesystem.png" alt="Claude Desktop with filesystem integration showing file management capabilities" />
 </Frame>
 
-### Prerequisites
+#### Prerequisites
 
 Before starting this tutorial, ensure you have the following installed on your system:
 
-#### Claude Desktop
+##### Claude Desktop
 
 Download and install [Claude Desktop](https://claude.ai/download) for your operating system. Claude Desktop is currently available for macOS and Windows. Linux support is coming soon.
 
 If you already have Claude Desktop installed, verify you're running the latest version by clicking the Claude menu and selecting "Check for Updates..."
 
-#### Node.js
+##### Node.js
 
 The Filesystem Server and many other MCP servers require Node.js to run. Verify your Node.js installation by opening a terminal or command prompt and running:
 
@@ -1242,7 +1257,7 @@ node --version
 
 If Node.js is not installed, download it from [nodejs.org](https://nodejs.org/). We recommend the LTS (Long Term Support) version for stability.
 
-### Understanding MCP Servers
+#### Understanding MCP Servers
 
 MCP servers are programs that run on your computer and provide specific capabilities to Claude Desktop through a standardized protocol. Each server exposes tools that Claude can use to perform actions, with your approval. The Filesystem Server we'll install provides tools for:
 
@@ -1253,7 +1268,7 @@ MCP servers are programs that run on your computer and provide specific capabili
 
 All actions require your explicit approval before execution, ensuring you maintain full control over what Claude can access and modify.
 
-### Installing the Filesystem Server
+#### Installing the Filesystem Server
 
 The process involves configuring Claude Desktop to automatically start the Filesystem Server whenever you launch the application. This configuration is done through a JSON file that tells Claude Desktop which servers to run and how to connect to them.
 
@@ -1288,7 +1303,7 @@ The process involves configuring Claude Desktop to automatically start the Files
   <Step title="Configure the Filesystem Server">
     Replace the contents of the configuration file with the following JSON structure. This configuration tells Claude Desktop to start the Filesystem Server with access to specific directories:
 
-
+    <CodeGroup>
       ```json macOS
       {
         "mcpServers": {
@@ -1320,9 +1335,8 @@ The process involves configuring Claude Desktop to automatically start the Files
         }
       }
       ```
-
-
-​    
+    </CodeGroup>
+    
     Replace `username` with your actual computer username. The paths listed in the `args` array specify which directories the Filesystem Server can access. You can modify these paths or add additional directories as needed.
     
     <Tip>
@@ -1361,17 +1375,17 @@ The process involves configuring Claude Desktop to automatically start the Files
   </Step>
 </Steps>
 
-### Using the Filesystem Server
+#### Using the Filesystem Server
 
 With the Filesystem Server connected, Claude can now interact with your file system. Try these example requests to explore the capabilities:
 
-#### File Management Examples
+##### File Management Examples
 
 * **"Can you write a poem and save it to my desktop?"** - Claude will compose a poem and create a new text file on your desktop
 * **"What work-related files are in my downloads folder?"** - Claude will scan your downloads and identify work-related documents
 * **"Please organize all images on my desktop into a new folder called 'Images'"** - Claude will create a folder and move image files into it
 
-#### How Approval Works
+##### How Approval Works
 
 Before executing any file system operation, Claude will request your approval. This ensures you maintain control over all actions:
 
@@ -1381,7 +1395,7 @@ Before executing any file system operation, Claude will request your approval. T
 
 Review each request carefully before approving. You can always deny a request if you're not comfortable with the proposed action.
 
-### Troubleshooting
+#### Troubleshooting
 
 If you encounter issues setting up or using the Filesystem Server, these solutions address common problems:
 
@@ -1393,7 +1407,7 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
     4. Look at [logs](#getting-logs-from-claude-for-desktop) to see why the server is not connecting
     5. In your command line, try manually running the server (replacing `username` as you did in `claude_desktop_config.json`) to see if you get any errors:
 
-
+    <CodeGroup>
       ```bash macOS/Linux
       npx -y @modelcontextprotocol/server-filesystem /Users/username/Desktop /Users/username/Downloads
       ```
@@ -1401,7 +1415,7 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
       ```powershell Windows
       npx -y @modelcontextprotocol/server-filesystem C:\Users\username\Desktop C:\Users\username\Downloads
       ```
-
+    </CodeGroup>
   </Accordion>
 
   <Accordion title="Getting logs from Claude Desktop">
@@ -1416,9 +1430,8 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
     * Files named `mcp-server-SERVERNAME.log` will contain error (stderr) logging from the named server.
     
     You can run the following command to list recent logs and follow along with any new ones (on Windows, it will only show recent logs):
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
       ```
@@ -1426,7 +1439,7 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
       ```powershell Windows
       type "%APPDATA%\Claude\logs\mcp*.log"
       ```
-
+    </CodeGroup>
   </Accordion>
 
   <Accordion title="Tool calls failing silently">
@@ -1471,7 +1484,7 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
   </Accordion>
 </AccordionGroup>
 
-### Next Steps
+#### Next Steps
 
 Now that you've successfully connected Claude Desktop to a local MCP server, explore these options to expand your setup:
 
@@ -1496,13 +1509,15 @@ Now that you've successfully connected Claude Desktop to a local MCP server, exp
   </Card>
 </CardGroup>
 
-## Build an MCP Server
+## Server Development
+
+### Build an MCP Server
 
 > Get started building your own server to use in Claude for Desktop and other clients.
 
 In this tutorial, we'll build a simple MCP weather server and connect it to a host, Claude for Desktop. We'll start with a basic setup, and then progress to more complex use cases.
 
-#### What we'll be building
+##### What we'll be building
 
 Many LLMs do not currently have the ability to fetch the forecast and severe weather alerts. Let's use MCP to solve that!
 
@@ -1520,7 +1535,7 @@ We'll build a server that exposes two tools: `get_alerts` and `get_forecast`. Th
   Servers can connect to any client. We've chosen Claude for Desktop here for simplicity, but we also have guides on [building your own client](/quickstart/client) as well as a [list of other clients here](/clients).
 </Note>
 
-#### Core MCP Concepts
+##### Core MCP Concepts
 
 MCP servers can provide three main types of capabilities:
 
@@ -1534,14 +1549,14 @@ This tutorial will primarily focus on tools.
   <Tab title="Python">
     Let's get started with building our weather server! [You can find the complete code for what we'll be building here.](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/weather-server-python)
 
-    #### Prerequisite knowledge
+    ##### Prerequisite knowledge
     
     This quickstart assumes you have familiarity with:
     
     * Python
     * LLMs like Claude
     
-    #### Logging in MCP Servers
+    ##### Logging in MCP Servers
     
     When implementing MCP servers, be careful about how you handle logging:
     
@@ -1556,11 +1571,11 @@ This tutorial will primarily focus on tools.
     
     **For HTTP-based servers:** Standard output logging is fine since it doesn't interfere with HTTP responses.
     
-    #### Best Practices
+    ##### Best Practices
     
     1. Use a logging library that writes to stderr or files.
     
-    #### Quick Examples
+    ##### Quick Examples
     
     ```python
     # ❌ Bad (STDIO)
@@ -1571,17 +1586,16 @@ This tutorial will primarily focus on tools.
     logging.info("Processing request")
     ```
     
-    #### System requirements
+    ##### System requirements
     
     * Python 3.10 or higher installed.
     * You must use the Python MCP SDK 1.2.0 or higher.
     
-    #### Set up your environment
+    ##### Set up your environment
     
     First, let's install `uv` and set up our Python project and environment:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       curl -LsSf https://astral.sh/uv/install.sh | sh
       ```
@@ -1589,15 +1603,13 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
       ```
-
-
-​    
+    </CodeGroup>
+    
     Make sure to restart your terminal afterwards to ensure that the `uv` command gets picked up.
     
     Now, let's create and set up our project:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       # Create a new directory for our project
       uv init weather
@@ -1629,14 +1641,13 @@ This tutorial will primarily focus on tools.
       # Create our server file
       new-item weather.py
       ```
-
-
-​    
+    </CodeGroup>
+    
     Now let's dive into building your server.
     
-    ### Building your server
+    #### Building your server
     
-    #### Importing packages and setting up the instance
+    ##### Importing packages and setting up the instance
     
     Add these to the top of your `weather.py`:
     
@@ -1655,7 +1666,7 @@ This tutorial will primarily focus on tools.
     
     The FastMCP class uses Python type hints and docstrings to automatically generate tool definitions, making it easy to create and maintain MCP tools.
     
-    #### Helper functions
+    ##### Helper functions
     
     Next, let's add our helper functions for querying and formatting the data from the National Weather Service API:
     
@@ -1686,7 +1697,7 @@ This tutorial will primarily focus on tools.
     """
     ```
     
-    #### Implementing tool execution
+    ##### Implementing tool execution
     
     The tool execution handler is responsible for actually executing the logic of each tool. Let's add it:
     
@@ -1747,7 +1758,7 @@ This tutorial will primarily focus on tools.
         return "\n---\n".join(forecasts)
     ```
     
-    #### Running the server
+    ##### Running the server
     
     Finally, let's initialize and run the server:
     
@@ -1761,7 +1772,7 @@ This tutorial will primarily focus on tools.
     
     Let's now test your server from an existing MCP host, Claude for Desktop.
     
-    ### Testing your server with Claude for Desktop
+    #### Testing your server with Claude for Desktop
     
     <Note>
       Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
@@ -1773,9 +1784,8 @@ This tutorial will primarily focus on tools.
     We'll need to configure Claude for Desktop for whichever MCP servers you want to use. To do this, open your Claude for Desktop App configuration at `~/Library/Application Support/Claude/claude_desktop_config.json` in a text editor. Make sure to create the file if it doesn't exist.
     
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
@@ -1783,15 +1793,13 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       code $env:AppData\Claude\claude_desktop_config.json
       ```
-
-
-​    
+    </CodeGroup>
+    
     You'll then add your servers in the `mcpServers` key. The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
     
     In this case, we'll add our single weather server like so:
-
-
-​    
+    
+    <CodeGroup>
       ```json macOS/Linux
       {
         "mcpServers": {
@@ -1823,9 +1831,8 @@ This tutorial will primarily focus on tools.
         }
       }
       ```
-
-
-​    
+    </CodeGroup>
+    
     <Warning>
       You may need to put the full path to the `uv` executable in the `command` field. You can get this by running `which uv` on macOS/Linux or `where uv` on Windows.
     </Warning>
@@ -1845,14 +1852,14 @@ This tutorial will primarily focus on tools.
   <Tab title="Node">
     Let's get started with building our weather server! [You can find the complete code for what we'll be building here.](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/weather-server-typescript)
 
-    #### Prerequisite knowledge
+    ##### Prerequisite knowledge
     
     This quickstart assumes you have familiarity with:
     
     * TypeScript
     * LLMs like Claude
     
-    #### Logging in MCP Servers
+    ##### Logging in MCP Servers
     
     When implementing MCP servers, be careful about how you handle logging:
     
@@ -1867,12 +1874,12 @@ This tutorial will primarily focus on tools.
     
     **For HTTP-based servers:** Standard output logging is fine since it doesn't interfere with HTTP responses.
     
-    #### Best Practices
+    ##### Best Practices
     
     1. Use a logging library that writes to stderr or files, such as `logging` in Python.
     2. For JavaScript, be especially careful - `console.log()` writes to stdout by default
     
-    #### Quick Examples
+    ##### Quick Examples
     
     ```javascript
     // ❌ Bad (STDIO)
@@ -1882,11 +1889,11 @@ This tutorial will primarily focus on tools.
     console.error("Server started"); // stderr is safe
     ```
     
-    #### System requirements
+    ##### System requirements
     
     For TypeScript, make sure you have the latest version of Node installed.
     
-    #### Set up your environment
+    ##### Set up your environment
     
     First, let's install Node.js and npm if you haven't already. You can download them from [nodejs.org](https://nodejs.org/).
     Verify your Node.js installation:
@@ -1899,9 +1906,8 @@ This tutorial will primarily focus on tools.
     For this tutorial, you'll need Node.js version 16 or higher.
     
     Now, let's create and set up our project:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       # Create a new directory for our project
       mkdir weather
@@ -1935,9 +1941,8 @@ This tutorial will primarily focus on tools.
       md src
       new-item src\index.ts
       ```
-
-
-​    
+    </CodeGroup>
+    
     Update your package.json to add type: "module" and a build script:
     
     ```json package.json
@@ -1975,9 +1980,9 @@ This tutorial will primarily focus on tools.
     
     Now let's dive into building your server.
     
-    ### Building your server
+    #### Building your server
     
-    #### Importing packages and setting up the instance
+    ##### Importing packages and setting up the instance
     
     Add these to the top of your `src/index.ts`:
     
@@ -2000,7 +2005,7 @@ This tutorial will primarily focus on tools.
     });
     ```
     
-    #### Helper functions
+    ##### Helper functions
     
     Next, let's add our helper functions for querying and formatting the data from the National Weather Service API:
     
@@ -2073,7 +2078,7 @@ This tutorial will primarily focus on tools.
     }
     ```
     
-    #### Implementing tool execution
+    ##### Implementing tool execution
     
     The tool execution handler is responsible for actually executing the logic of each tool. Let's add it:
     
@@ -2216,7 +2221,7 @@ This tutorial will primarily focus on tools.
     );
     ```
     
-    #### Running the server
+    ##### Running the server
     
     Finally, implement the main function to run the server:
     
@@ -2237,7 +2242,7 @@ This tutorial will primarily focus on tools.
     
     Let's now test your server from an existing MCP host, Claude for Desktop.
     
-    ### Testing your server with Claude for Desktop
+    #### Testing your server with Claude for Desktop
     
     <Note>
       Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
@@ -2249,9 +2254,8 @@ This tutorial will primarily focus on tools.
     We'll need to configure Claude for Desktop for whichever MCP servers you want to use. To do this, open your Claude for Desktop App configuration at `~/Library/Application Support/Claude/claude_desktop_config.json` in a text editor. Make sure to create the file if it doesn't exist.
     
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
@@ -2259,15 +2263,13 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       code $env:AppData\Claude\claude_desktop_config.json
       ```
-
-
-​    
+    </CodeGroup>
+    
     You'll then add your servers in the `mcpServers` key. The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
     
     In this case, we'll add our single weather server like so:
-
-
-​    
+    
+    <CodeGroup>
       ```json macOS/Linux
       {
         "mcpServers": {
@@ -2289,9 +2291,8 @@ This tutorial will primarily focus on tools.
         }
       }
       ```
-
-
-​    
+    </CodeGroup>
+    
     This tells Claude for Desktop:
     
     1. There's an MCP server named "weather"
@@ -2312,7 +2313,7 @@ This tutorial will primarily focus on tools.
     For more information, see the [MCP Server Boot Starter](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-starter-docs.html) reference documentation.
     For manual MCP Server implementation, refer to the [MCP Server Java SDK documentation](/sdk/java/mcp-server).
     
-    #### Logging in MCP Servers
+    ##### Logging in MCP Servers
     
     When implementing MCP servers, be careful about how you handle logging:
     
@@ -2327,24 +2328,23 @@ This tutorial will primarily focus on tools.
     
     **For HTTP-based servers:** Standard output logging is fine since it doesn't interfere with HTTP responses.
     
-    #### Best Practices
+    ##### Best Practices
     
     1. Use a logging library that writes to stderr or files.
     2. Ensure any configured logging library will not write to STDOUT
     
-    #### System requirements
+    ##### System requirements
     
     * Java 17 or higher installed.
     * [Spring Boot 3.3.x](https://docs.spring.io/spring-boot/installing.html) or higher
     
-    #### Set up your environment
+    ##### Set up your environment
     
     Use the [Spring Initializer](https://start.spring.io/) to bootstrap the project.
     
     You will need to add the following dependencies:
-
-
-​    
+    
+    <CodeGroup>
       ```xml Maven
       <dependencies>
             <dependency>
@@ -2365,13 +2365,11 @@ This tutorial will primarily focus on tools.
         implementation platform("org.springframework:spring-web")
       }
       ```
-
-
-​    
+    </CodeGroup>
+    
     Then configure your application by setting the application properties:
-
-
-​    
+    
+    <CodeGroup>
       ```bash application.properties
       spring.main.bannerMode=off
       logging.pattern.console=
@@ -2385,16 +2383,15 @@ This tutorial will primarily focus on tools.
         main:
           banner-mode: off
       ```
-
-
-​    
+    </CodeGroup>
+    
     The [Server Configuration Properties](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-starter-docs.html#_configuration_properties) documents all available properties.
     
     Now let's dive into building your server.
     
-    ### Building your server
+    #### Building your server
     
-    #### Weather Service
+    ##### Weather Service
     
     Let's implement a [WeatherService.java](https://github.com/spring-projects/spring-ai-examples/blob/main/model-context-protocol/weather/starter-stdio-server/src/main/java/org/springframework/ai/mcp/sample/server/WeatherService.java) that uses a REST client to query the data from the National Weather Service API:
     
@@ -2444,7 +2441,7 @@ This tutorial will primarily focus on tools.
     
     The auto-configuration will automatically register these tools with the MCP server.
     
-    #### Create your Boot Application
+    ##### Create your Boot Application
     
     ```java
     @SpringBootApplication
@@ -2463,7 +2460,7 @@ This tutorial will primarily focus on tools.
     
     Uses the the `MethodToolCallbackProvider` utils to convert the `@Tools` into actionable callbacks used by the MCP server.
     
-    #### Running the server
+    ##### Running the server
     
     Finally, let's build the server:
     
@@ -2475,7 +2472,7 @@ This tutorial will primarily focus on tools.
     
     Let's now test your server from an existing MCP host, Claude for Desktop.
     
-    ### Testing your server with Claude for Desktop
+    #### Testing your server with Claude for Desktop
     
     <Note>
       Claude for Desktop is not yet available on Linux.
@@ -2489,9 +2486,8 @@ This tutorial will primarily focus on tools.
     Make sure to create the file if it doesn't exist.
     
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
@@ -2499,16 +2495,14 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       code $env:AppData\Claude\claude_desktop_config.json
       ```
-
-
-​    
+    </CodeGroup>
+    
     You'll then add your servers in the `mcpServers` key.
     The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
     
     In this case, we'll add our single weather server like so:
-
-
-​    
+    
+    <CodeGroup>
       ```json macOS/Linux
       {
         "mcpServers": {
@@ -2538,9 +2532,8 @@ This tutorial will primarily focus on tools.
         }
       }
       ```
-
-
-​    
+    </CodeGroup>
+    
     <Note>
       Make sure you pass in the absolute path to your server.
     </Note>
@@ -2552,9 +2545,9 @@ This tutorial will primarily focus on tools.
     
     Save the file, and restart **Claude for Desktop**.
     
-    ### Testing your server with Java client
+    #### Testing your server with Java client
     
-    #### Create a MCP Client manually
+    ##### Create a MCP Client manually
     
     Use the `McpClient` to connect to the server:
     
@@ -2581,7 +2574,7 @@ This tutorial will primarily focus on tools.
     mcpClient.closeGracefully();
     ```
     
-    #### Use MCP Client Boot Starter
+    ##### Use MCP Client Boot Starter
     
     Create a new boot starter application using the `spring-ai-starter-mcp-client` dependency:
     
@@ -2603,7 +2596,7 @@ This tutorial will primarily focus on tools.
     
     For more information, see the [MCP Client Boot Starters](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-client-docs.html) reference documentation.
     
-    ### More Java MCP Server examples
+    #### More Java MCP Server examples
     
     The [starter-webflux-server](https://github.com/spring-projects/spring-ai-examples/tree/main/model-context-protocol/weather/starter-webflux-server) demonstrates how to create a MCP server using SSE transport.
     It showcases how to define and register MCP Tools, Resources, and Prompts, using the Spring Boot's auto-configuration capabilities.
@@ -2612,18 +2605,18 @@ This tutorial will primarily focus on tools.
   <Tab title="Kotlin">
     Let's get started with building our weather server! [You can find the complete code for what we'll be building here.](https://github.com/modelcontextprotocol/kotlin-sdk/tree/main/samples/weather-stdio-server)
 
-    #### Prerequisite knowledge
+    ##### Prerequisite knowledge
     
     This quickstart assumes you have familiarity with:
     
     * Kotlin
     * LLMs like Claude
     
-    #### System requirements
+    ##### System requirements
     
     * Java 17 or higher installed.
     
-    #### Set up your environment
+    ##### Set up your environment
     
     First, let's install `java` and `gradle` if you haven't already.
     You can download `java` from [official Oracle JDK website](https://www.oracle.com/java/technologies/downloads/).
@@ -2634,9 +2627,8 @@ This tutorial will primarily focus on tools.
     ```
     
     Now, let's create and set up your project:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       # Create a new directory for our project
       mkdir weather
@@ -2654,18 +2646,16 @@ This tutorial will primarily focus on tools.
       # Initialize a new kotlin project
       gradle init
       ```
-
-
-​    
+    </CodeGroup>
+    
     After running `gradle init`, you will be presented with options for creating your project.
     Select **Application** as the project type, **Kotlin** as the programming language, and **Java 17** as the Java version.
     
     Alternatively, you can create a Kotlin application using the [IntelliJ IDEA project wizard](https://kotlinlang.org/docs/jvm-get-started.html).
     
     After creating the project, add the following dependencies:
-
-
-​    
+    
+    <CodeGroup>
       ```kotlin build.gradle.kts
       val mcpVersion = "0.4.0"
       val slf4jVersion = "2.0.9"
@@ -2691,13 +2681,11 @@ This tutorial will primarily focus on tools.
           implementation "io.ktor:ktor-serialization-kotlinx-json:$ktorVersion"
       }
       ```
-
-
-​    
+    </CodeGroup>
+    
     Also, add the following plugins to your build script:
-
-
-​    
+    
+    <CodeGroup>
       ```kotlin build.gradle.kts
       plugins {
           kotlin("plugin.serialization") version "your_version_of_kotlin"
@@ -2711,14 +2699,13 @@ This tutorial will primarily focus on tools.
           id 'com.github.johnrengelman.shadow' version '8.1.1'
       }
       ```
-
-
-​    
+    </CodeGroup>
+    
     Now let’s dive into building your server.
     
-    ### Building your server
+    #### Building your server
     
-    #### Setting up the instance
+    ##### Setting up the instance
     
     Add a server initialization function:
     
@@ -2753,7 +2740,7 @@ This tutorial will primarily focus on tools.
     }
     ```
     
-    #### Weather API helper functions
+    ##### Weather API helper functions
     
     Next, let's add functions and data classes for querying and converting responses from the National Weather Service API:
     
@@ -2828,7 +2815,7 @@ This tutorial will primarily focus on tools.
     }
     ```
     
-    #### Implementing tool execution
+    ##### Implementing tool execution
     
     The tool execution handler is responsible for actually executing the logic of each tool. Let's add it:
     
@@ -2903,7 +2890,7 @@ This tutorial will primarily focus on tools.
     }
     ```
     
-    #### Running the server
+    ##### Running the server
     
     Finally, implement the main function to run the server:
     
@@ -2915,7 +2902,7 @@ This tutorial will primarily focus on tools.
     
     Let's now test your server from an existing MCP host, Claude for Desktop.
     
-    ### Testing your server with Claude for Desktop
+    #### Testing your server with Claude for Desktop
     
     <Note>
       Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
@@ -2929,9 +2916,8 @@ This tutorial will primarily focus on tools.
     Make sure to create the file if it doesn't exist.
     
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
@@ -2939,16 +2925,14 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       code $env:AppData\Claude\claude_desktop_config.json
       ```
-
-
-​    
+    </CodeGroup>
+    
     You'll then add your servers in the `mcpServers` key.
     The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
     
     In this case, we'll add our single weather server like so:
-
-
-​    
+    
+    <CodeGroup>
       ```json macOS/Linux
       {
         "mcpServers": {
@@ -2976,9 +2960,8 @@ This tutorial will primarily focus on tools.
         }
       }
       ```
-
-
-​    
+    </CodeGroup>
+    
     This tells Claude for Desktop:
     
     1. There's an MCP server named "weather"
@@ -2990,7 +2973,7 @@ This tutorial will primarily focus on tools.
   <Tab title="C#">
     Let's get started with building our weather server! [You can find the complete code for what we'll be building here.](https://github.com/modelcontextprotocol/csharp-sdk/tree/main/samples/QuickstartWeatherServer)
 
-    #### Prerequisite knowledge
+    ##### Prerequisite knowledge
     
     This quickstart assumes you have familiarity with:
     
@@ -2998,7 +2981,7 @@ This tutorial will primarily focus on tools.
     * LLMs like Claude
     * .NET 8 or higher
     
-    #### Logging in MCP Servers
+    ##### Logging in MCP Servers
     
     When implementing MCP servers, be careful about how you handle logging:
     
@@ -3013,15 +2996,15 @@ This tutorial will primarily focus on tools.
     
     **For HTTP-based servers:** Standard output logging is fine since it doesn't interfere with HTTP responses.
     
-    #### Best Practices
+    ##### Best Practices
     
     1. Use a logging library that writes to stderr or files
     
-    #### System requirements
+    ##### System requirements
     
     * [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or higher installed.
     
-    #### Set up your environment
+    ##### Set up your environment
     
     First, let's install `dotnet` if you haven't already. You can download `dotnet` from [official Microsoft .NET website](https://dotnet.microsoft.com/download/). Verify your `dotnet` installation:
     
@@ -3030,9 +3013,8 @@ This tutorial will primarily focus on tools.
     ```
     
     Now, let's create and set up your project:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       # Create a new directory for our project
       mkdir weather
@@ -3048,9 +3030,8 @@ This tutorial will primarily focus on tools.
       # Initialize a new C# project
       dotnet new console
       ```
-
-
-​    
+    </CodeGroup>
+    
     After running `dotnet new console`, you will be presented with a new C# project.
     You can open the project in your favorite IDE, such as [Visual Studio](https://visualstudio.microsoft.com/) or [Rider](https://www.jetbrains.com/rider/).
     Alternatively, you can create a C# application using the [Visual Studio project wizard](https://learn.microsoft.com/en-us/visualstudio/get-started/csharp/tutorial-console?view=vs-2022).
@@ -3065,7 +3046,7 @@ This tutorial will primarily focus on tools.
     
     Now let’s dive into building your server.
     
-    ## Building your server
+    #### Building your server
     
     Open the `Program.cs` file in your project and replace its contents with the following code:
     
@@ -3099,7 +3080,7 @@ This tutorial will primarily focus on tools.
     
     This code sets up a basic console application that uses the Model Context Protocol SDK to create an MCP server with standard I/O transport.
     
-    ### Weather API helper functions
+    ##### Weather API helper functions
     
     Create an extension class for `HttpClient` which helps simplify JSON request handling:
     
@@ -3181,7 +3162,7 @@ This tutorial will primarily focus on tools.
     }
     ```
     
-    ### Running the server
+    ##### Running the server
     
     Finally, run the server using the following command:
     
@@ -3191,7 +3172,7 @@ This tutorial will primarily focus on tools.
     
     This will start the server and listen for incoming requests on standard input/output.
     
-    ### Testing your server with Claude for Desktop
+    #### Testing your server with Claude for Desktop
     
     <Note>
       Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
@@ -3201,9 +3182,8 @@ This tutorial will primarily focus on tools.
     here.](https://claude.ai/download) If you already have Claude for Desktop, **make sure it's updated to the latest version.**
     We'll need to configure Claude for Desktop for whichever MCP servers you want to use. To do this, open your Claude for Desktop App configuration at `~/Library/Application Support/Claude/claude_desktop_config.json` in a text editor. Make sure to create the file if it doesn't exist.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
@@ -3211,14 +3191,12 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       code $env:AppData\Claude\claude_desktop_config.json
       ```
-
-
-​    
+    </CodeGroup>
+    
     You'll then add your servers in the `mcpServers` key. The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
     In this case, we'll add our single weather server like so:
-
-
-​    
+    
+    <CodeGroup>
       ```json macOS/Linux
       {
         "mcpServers": {
@@ -3245,9 +3223,8 @@ This tutorial will primarily focus on tools.
         }
       }
       ```
-
-
-​    
+    </CodeGroup>
+    
     This tells Claude for Desktop:
     
     1. There's an MCP server named "weather"
@@ -3256,7 +3233,7 @@ This tutorial will primarily focus on tools.
   </Tab>
 </Tabs>
 
-#### Test with commands
+##### Test with commands
 
 Let's make sure Claude for Desktop is picking up the two tools we've exposed in our `weather` server. You can do this by looking for the "Search and tools" <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/claude-desktop-mcp-slider.svg" style={{display: 'inline', margin: 0, height: '1.3em'}} /> icon:
 
@@ -3289,7 +3266,7 @@ If the tool settings icon has shown up, you can now test your server by running 
   Since this is the US National Weather service, the queries will only work for US locations.
 </Note>
 
-### What's happening under the hood
+#### What's happening under the hood
 
 When you ask a question:
 
@@ -3300,7 +3277,7 @@ When you ask a question:
 5. Claude formulates a natural language response
 6. The response is displayed to you!
 
-### Troubleshooting
+#### Troubleshooting
 
 <AccordionGroup>
   <Accordion title="Claude for Desktop Integration Issues">
@@ -3362,7 +3339,7 @@ When you ask a question:
   For more advanced troubleshooting, check out our guide on [Debugging MCP](/legacy/tools/debugging)
 </Note>
 
-### Next steps
+#### Next steps
 
 <CardGroup cols={2}>
   <Card title="Building a client" icon="outlet" href="/quickstart/client">
@@ -3382,15 +3359,15 @@ When you ask a question:
   </Card>
 </CardGroup>
 
-## Inspector
+### Inspector
 
 > In-depth guide to using the MCP Inspector for testing and debugging Model Context Protocol servers
 
 The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is an interactive developer tool for testing and debugging MCP servers. While the [Debugging Guide](/legacy/tools/debugging) covers the Inspector as part of the overall debugging toolkit, this document provides a detailed exploration of the Inspector's features and capabilities.
 
-### Getting started
+#### Getting started
 
-#### Installation and basic usage
+##### Installation and basic usage
 
 The Inspector runs directly through `npx` without requiring installation:
 
@@ -3402,7 +3379,7 @@ npx @modelcontextprotocol/inspector <command>
 npx @modelcontextprotocol/inspector <command> <arg1> <arg2>
 ```
 
-##### Inspecting servers from NPM or PyPi
+###### Inspecting servers from NPM or PyPi
 
 A common way to start server packages from [NPM](https://npmjs.com) or [PyPi](https://pypi.org).
 
@@ -3410,7 +3387,7 @@ A common way to start server packages from [NPM](https://npmjs.com) or [PyPi](ht
   <Tab title="NPM package">
     ```bash
     npx -y @modelcontextprotocol/inspector npx <package-name> <args>
-    # For example
+    ### For example
     npx -y @modelcontextprotocol/inspector npx @modelcontextprotocol/server-filesystem /Users/username/Desktop
     ```
   </Tab>
@@ -3424,9 +3401,10 @@ A common way to start server packages from [NPM](https://npmjs.com) or [PyPi](ht
   </Tab>
 </Tabs>
 
-##### Inspecting locally developed servers
+###### Inspecting locally developed servers
 
-To inspect servers locally developed or downloaded as a repository, the most common way is:
+To inspect servers locally developed or downloaded as a repository, the most common
+way is:
 
 <Tabs>
   <Tab title="TypeScript">
@@ -3449,7 +3427,7 @@ To inspect servers locally developed or downloaded as a repository, the most com
 
 Please carefully read any attached README for the most accurate instructions.
 
-### Feature overview
+#### Feature overview
 
 <Frame caption="The MCP Inspector interface">
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/mcp-inspector.png" />
@@ -3457,40 +3435,40 @@ Please carefully read any attached README for the most accurate instructions.
 
 The Inspector provides several features for interacting with your MCP server:
 
-#### Server connection pane
+##### Server connection pane
 
 * Allows selecting the [transport](/legacy/concepts/transports) for connecting to the server
 * For local servers, supports customizing the command-line arguments and environment
 
-#### Resources tab
+##### Resources tab
 
 * Lists all available resources
 * Shows resource metadata (MIME types, descriptions)
 * Allows resource content inspection
 * Supports subscription testing
 
-#### Prompts tab
+##### Prompts tab
 
 * Displays available prompt templates
 * Shows prompt arguments and descriptions
 * Enables prompt testing with custom arguments
 * Previews generated messages
 
-#### Tools tab
+##### Tools tab
 
 * Lists available tools
 * Shows tool schemas and descriptions
 * Enables tool testing with custom inputs
 * Displays tool execution results
 
-#### Notifications pane
+##### Notifications pane
 
 * Presents all logs recorded from the server
 * Shows notifications received from the server
 
-### Best practices
+#### Best practices
 
-#### Development workflow
+##### Development workflow
 
 1. Start Development
 
@@ -3512,7 +3490,7 @@ The Inspector provides several features for interacting with your MCP server:
    * Concurrent operations
    * Verify error handling and error responses
 
-### Next steps
+#### Next steps
 
 <CardGroup cols={2}>
   <Card title="Inspector Repository" icon="github" href="https://github.com/modelcontextprotocol/inspector">
@@ -3524,7 +3502,9 @@ The Inspector provides several features for interacting with your MCP server:
   </Card>
 </CardGroup>
 
-## Build an MCP Client
+## Client Development
+
+### Build an MCP Client
 
 > Get started building your own client that can integrate with all MCP servers.
 
@@ -3534,7 +3514,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
   <Tab title="Python">
     [You can find the complete code for this tutorial here.](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/mcp-client-python)
 
-    ### System Requirements
+    #### System Requirements
     
     Before starting, ensure your system meets these requirements:
     
@@ -3542,7 +3522,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * Latest Python version installed
     * Latest version of `uv` installed
     
-    ### Setting Up Your Environment
+    #### Setting Up Your Environment
     
     First, create a new Python project with `uv`:
     
@@ -3573,7 +3553,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     touch client.py
     ```
     
-    ### Setting Up Your API Key
+    #### Setting Up Your API Key
     
     You'll need an Anthropic API key from the [Anthropic Console](https://console.anthropic.com/settings/keys).
     
@@ -3600,9 +3580,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
       Make sure you keep your `ANTHROPIC_API_KEY` secure!
     </Warning>
     
-    ### Creating the Client
+    #### Creating the Client
     
-    #### Basic Client Structure
+    ##### Basic Client Structure
     
     First, let's set up our imports and create the basic client class:
     
@@ -3628,7 +3608,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
         # methods will go here
     ```
     
-    #### Server Connection Management
+    ##### Server Connection Management
     
     Next, we'll implement the method to connect to an MCP server:
     
@@ -3663,7 +3643,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
         print("\nConnected to server with tools:", [tool.name for tool in tools])
     ```
     
-    #### Query Processing Logic
+    ##### Query Processing Logic
     
     Now let's add the core functionality for processing queries and handling tool calls:
     
@@ -3737,7 +3717,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
         return "\n".join(final_text)
     ```
     
-    #### Interactive Chat Interface
+    ##### Interactive Chat Interface
     
     Now we'll add the chat loop and cleanup functionality:
     
@@ -3765,7 +3745,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
         await self.exit_stack.aclose()
     ```
     
-    #### Main Entry Point
+    ##### Main Entry Point
     
     Finally, we'll add the main execution logic:
     
@@ -3789,42 +3769,42 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     
     You can find the complete `client.py` file [here.](https://gist.github.com/zckly/f3f28ea731e096e53b39b47bf0a2d4b1)
     
-    ### Key Components Explained
+    #### Key Components Explained
     
-    #### 1. Client Initialization
+    ##### 1. Client Initialization
     
     * The `MCPClient` class initializes with session management and API clients
     * Uses `AsyncExitStack` for proper resource management
     * Configures the Anthropic client for Claude interactions
     
-    #### 2. Server Connection
+    ##### 2. Server Connection
     
     * Supports both Python and Node.js servers
     * Validates server script type
     * Sets up proper communication channels
     * Initializes the session and lists available tools
     
-    #### 3. Query Processing
+    ##### 3. Query Processing
     
     * Maintains conversation context
     * Handles Claude's responses and tool calls
     * Manages the message flow between Claude and tools
     * Combines results into a coherent response
     
-    #### 4. Interactive Interface
+    ##### 4. Interactive Interface
     
     * Provides a simple command-line interface
     * Handles user input and displays responses
     * Includes basic error handling
     * Allows graceful exit
     
-    #### 5. Resource Management
+    ##### 5. Resource Management
     
     * Proper cleanup of resources
     * Error handling for connection issues
     * Graceful shutdown procedures
     
-    ### Common Customization Points
+    #### Common Customization Points
     
     1. **Tool Handling**
     
@@ -3843,7 +3823,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
        * Implement rich console output
        * Add command history or auto-completion
     
-    ### Running the Client
+    #### Running the Client
     
     To run your client with any MCP server:
     
@@ -3871,7 +3851,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
       <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/client-claude-cli-python.png" />
     </Frame>
     
-    ### How It Works
+    #### How It Works
     
     When you submit a query:
     
@@ -3883,7 +3863,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     6. Claude provides a natural language response
     7. The response is displayed to you
     
-    ### Best practices
+    #### Best practices
     
     1. **Error Handling**
     
@@ -3902,9 +3882,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
        * Validate server responses
        * Be cautious with tool permissions
     
-    ### Troubleshooting
+    #### Troubleshooting
     
-    #### Server Path Issues
+    ##### Server Path Issues
     
     * Double-check the path to your server script is correct
     * Use the absolute path if the relative path isn't working
@@ -3925,7 +3905,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     uv run client.py C:\\projects\\mcp-server\\weather.py
     ```
     
-    #### Response Timing
+    ##### Response Timing
     
     * The first response might take up to 30 seconds to return
     * This is normal and happens while:
@@ -3935,7 +3915,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * Subsequent responses are typically faster
     * Don't interrupt the process during this initial waiting period
     
-    #### Common Error Messages
+    ##### Common Error Messages
     
     If you see:
     
@@ -3948,7 +3928,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
   <Tab title="Node">
     [You can find the complete code for this tutorial here.](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/mcp-client-typescript)
 
-    ### System Requirements
+    #### System Requirements
     
     Before starting, ensure your system meets these requirements:
     
@@ -3957,12 +3937,11 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * Latest version of `npm` installed
     * Anthropic API key (Claude)
     
-    ### Setting Up Your Environment
+    #### Setting Up Your Environment
     
     First, let's create and set up our project:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       # Create project directory
       mkdir mcp-client-typescript
@@ -3998,9 +3977,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
       # Create source file
       new-item index.ts
       ```
-
-
-​    
+    </CodeGroup>
+    
     Update your `package.json` to set `type: "module"` and a build script:
     
     ```json package.json
@@ -4032,7 +4010,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    ### Setting Up Your API Key
+    #### Setting Up Your API Key
     
     You'll need an Anthropic API key from the [Anthropic Console](https://console.anthropic.com/settings/keys).
     
@@ -4052,9 +4030,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
       Make sure you keep your `ANTHROPIC_API_KEY` secure!
     </Warning>
     
-    ### Creating the Client
+    #### Creating the Client
     
-    #### Basic Client Structure
+    ##### Basic Client Structure
     
     First, let's set up our imports and create the basic client class in `index.ts`:
     
@@ -4092,7 +4070,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    #### Server Connection Management
+    ##### Server Connection Management
     
     Next, we'll implement the method to connect to an MCP server:
     
@@ -4135,7 +4113,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    #### Query Processing Logic
+    ##### Query Processing Logic
     
     Now let's add the core functionality for processing queries and handling tool calls:
     
@@ -4193,7 +4171,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    #### Interactive Chat Interface
+    ##### Interactive Chat Interface
     
     Now we'll add the chat loop and cleanup functionality:
     
@@ -4226,7 +4204,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    #### Main Entry Point
+    ##### Main Entry Point
     
     Finally, we'll add the main execution logic:
     
@@ -4249,7 +4227,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     main();
     ```
     
-    ### Running the Client
+    #### Running the Client
     
     To run your client with any MCP server:
     
@@ -4275,7 +4253,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
        * See tool executions
        * Get responses from Claude
     
-    ### How It Works
+    #### How It Works
     
     When you submit a query:
     
@@ -4287,7 +4265,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     6. Claude provides a natural language response
     7. The response is displayed to you
     
-    ### Best practices
+    #### Best practices
     
     1. **Error Handling**
     
@@ -4301,9 +4279,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
        * Validate server responses
        * Be cautious with tool permissions
     
-    ### Troubleshooting
+    #### Troubleshooting
     
-    #### Server Path Issues
+    ##### Server Path Issues
     
     * Double-check the path to your server script is correct
     * Use the absolute path if the relative path isn't working
@@ -4324,7 +4302,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     node build/index.js C:\\projects\\mcp-server\\build\\index.js
     ```
     
-    #### Response Timing
+    ##### Response Timing
     
     * The first response might take up to 30 seconds to return
     * This is normal and happens while:
@@ -4334,7 +4312,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * Subsequent responses are typically faster
     * Don't interrupt the process during this initial waiting period
     
-    #### Common Error Messages
+    ##### Common Error Messages
     
     If you see:
     
@@ -4354,7 +4332,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     This example demonstrates how to build an interactive chatbot that combines Spring AI's Model Context Protocol (MCP) with the [Brave Search MCP Server](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/brave-search). The application creates a conversational interface powered by Anthropic's Claude AI model that can perform internet searches through Brave Search, enabling natural language interactions with real-time web data.
     [You can find the complete code for this tutorial here.](https://github.com/spring-projects/spring-ai-examples/tree/main/model-context-protocol/web-search/brave-chatbot)
     
-    ### System Requirements
+    #### System Requirements
     
     Before starting, ensure your system meets these requirements:
     
@@ -4364,7 +4342,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * Anthropic API key (Claude)
     * Brave Search API key
     
-    ### Setting Up Your Environment
+    #### Setting Up Your Environment
     
     1. Install npx (Node Package eXecute):
        First, make sure to install [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
@@ -4403,11 +4381,11 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
       Make sure you keep your `ANTHROPIC_API_KEY` and `BRAVE_API_KEY` keys secure!
     </Warning>
     
-    ### How it Works
+    #### How it Works
     
     The application integrates Spring AI with the Brave Search MCP server through several components:
     
-    #### MCP Client Configuration
+    ##### MCP Client Configuration
     
     1. Required dependencies in pom.xml:
     
@@ -4463,7 +4441,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    #### Chat Implementation
+    ##### Chat Implementation
     
     The chatbot is implemented using Spring AI's ChatClient with MCP tool integration:
     
@@ -4486,7 +4464,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * Maintains conversation memory using InMemoryChatMemory
     * Runs as an interactive command-line application
     
-    #### Build and run
+    ##### Build and run
     
     ```bash
     ./mvnw clean install
@@ -4508,7 +4486,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * Remember context from previous messages in the conversation
     * Combine information from multiple sources to provide comprehensive answers
     
-    #### Advanced Configuration
+    ##### Advanced Configuration
     
     The MCP client supports additional configuration options:
     
@@ -4532,14 +4510,14 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
   <Tab title="Kotlin">
     [You can find the complete code for this tutorial here.](https://github.com/modelcontextprotocol/kotlin-sdk/tree/main/samples/kotlin-mcp-client)
 
-    ### System Requirements
+    #### System Requirements
     
     Before starting, ensure your system meets these requirements:
     
     * Java 17 or higher
     * Anthropic API key (Claude)
     
-    ### Setting up your environment
+    #### Setting up your environment
     
     First, let's install `java` and `gradle` if you haven't already.
     You can download `java` from [official Oracle JDK website](https://www.oracle.com/java/technologies/downloads/).
@@ -4550,9 +4528,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     ```
     
     Now, let's create and set up your project:
-
-
-​    
+    
+    <CodeGroup>
       ```bash macOS/Linux
       # Create a new directory for our project
       mkdir kotlin-mcp-client
@@ -4569,18 +4546,16 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
       # Initialize a new kotlin project
       gradle init
       ```
-
-
-​    
+    </CodeGroup>
+    
     After running `gradle init`, you will be presented with options for creating your project.
     Select **Application** as the project type, **Kotlin** as the programming language, and **Java 17** as the Java version.
     
     Alternatively, you can create a Kotlin application using the [IntelliJ IDEA project wizard](https://kotlinlang.org/docs/jvm-get-started.html).
     
     After creating the project, add the following dependencies:
-
-
-​    
+    
+    <CodeGroup>
       ```kotlin build.gradle.kts
       val mcpVersion = "0.4.0"
       val slf4jVersion = "2.0.9"
@@ -4603,13 +4578,11 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
           implementation "com.anthropic:anthropic-java:$anthropicVersion"
       }
       ```
-
-
-​    
+    </CodeGroup>
+    
     Also, add the following plugins to your build script:
-
-
-​    
+    
+    <CodeGroup>
       ```kotlin build.gradle.kts
       plugins {
           id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -4621,10 +4594,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
           id 'com.github.johnrengelman.shadow' version '8.1.1'
       }
       ```
-
-
-​    
-    ### Setting up your API key
+    </CodeGroup>
+    
+    #### Setting up your API key
     
     You'll need an Anthropic API key from the [Anthropic Console](https://console.anthropic.com/settings/keys).
     
@@ -4638,9 +4610,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
       Make sure your keep your `ANTHROPIC_API_KEY` secure!
     </Warning>
     
-    ### Creating the Client
+    #### Creating the Client
     
-    #### Basic Client Structure
+    ##### Basic Client Structure
     
     First, let's create the basic client class:
     
@@ -4660,7 +4632,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
         }
     ```
     
-    #### Server connection management
+    ##### Server connection management
     
     Next, we'll implement the method to connect to an MCP server:
     
@@ -4719,7 +4691,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    #### Query processing logic
+    ##### Query processing logic
     
     Now let's add the core functionality for processing queries and handling tool calls:
     
@@ -4787,7 +4759,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    #### Interactive chat
+    ##### Interactive chat
     
     We'll add the chat loop:
     
@@ -4806,7 +4778,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    #### Main entry point
+    ##### Main entry point
     
     Finally, we'll add the main execution function:
     
@@ -4822,7 +4794,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    ### Running the client
+    #### Running the client
     
     To run your client with any MCP server:
     
@@ -4848,7 +4820,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
        * See tool executions
        * Get responses from Claude
     
-    ### How it works
+    #### How it works
     
     Here's a high-level workflow schema:
     
@@ -4887,7 +4859,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     6. Claude provides a natural language response
     7. The response is displayed to you
     
-    ### Best practices
+    #### Best practices
     
     1. **Error Handling**
     
@@ -4901,9 +4873,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
        * Validate all external responses to avoid unexpected or unsafe data usage
        * Be cautious with permissions and trust boundaries when using tools
     
-    ### Troubleshooting
+    #### Troubleshooting
     
-    #### Server Path Issues
+    ##### Server Path Issues
     
     * Double-check the path to your server script is correct
     * Use the absolute path if the relative path isn't working
@@ -4925,7 +4897,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     java -jar build/libs/client.jar C:\\projects\\mcp-server\\build\\libs\\server.jar
     ```
     
-    #### Response Timing
+    ##### Response Timing
     
     * The first response might take up to 30 seconds to return
     * This is normal and happens while:
@@ -4935,7 +4907,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * Subsequent responses are typically faster
     * Don't interrupt the process during this initial waiting period
     
-    #### Common Error Messages
+    ##### Common Error Messages
     
     If you see:
     
@@ -4947,7 +4919,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
   <Tab title="C#">
     [You can find the complete code for this tutorial here.](https://github.com/modelcontextprotocol/csharp-sdk/tree/main/samples/QuickstartClient)
 
-    ### System Requirements
+    #### System Requirements
     
     Before starting, ensure your system meets these requirements:
     
@@ -4955,7 +4927,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * Anthropic API key (Claude)
     * Windows, Linux, or macOS
     
-    ### Setting up your environment
+    #### Setting up your environment
     
     First, create a new .NET project:
     
@@ -4973,7 +4945,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     dotnet add package Microsoft.Extensions.AI
     ```
     
-    ### Setting up your API key
+    #### Setting up your API key
     
     You'll need an Anthropic API key from the [Anthropic Console](https://console.anthropic.com/settings/keys).
     
@@ -4982,9 +4954,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     dotnet user-secrets set "ANTHROPIC_API_KEY" "<your key here>"
     ```
     
-    ### Creating the Client
+    #### Creating the Client
     
-    #### Basic Client Structure
+    ##### Basic Client Structure
     
     First, let's setup the basic client class in the file `Program.cs`:
     
@@ -5043,7 +5015,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     
     This creates a MCP client that will connect to a server that is provided as a command line argument. It then lists the available tools from the connected server.
     
-    #### Query processing logic
+    ##### Query processing logic
     
     Now let's add the core functionality for processing queries and handling tool calls:
     
@@ -5092,20 +5064,20 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     }
     ```
     
-    ### Key Components Explained
+    #### Key Components Explained
     
-    #### 1. Client Initialization
+    ##### 1. Client Initialization
     
     * The client is initialized using `McpClientFactory.CreateAsync()`, which sets up the transport type and command to run the server.
     
-    #### 2. Server Connection
+    ##### 2. Server Connection
     
     * Supports Python, Node.js, and .NET servers.
     * The server is started using the command specified in the arguments.
     * Configures to use stdio for communication with the server.
     * Initializes the session and available tools.
     
-    #### 3. Query Processing
+    ##### 3. Query Processing
     
     * Leverages [Microsoft.Extensions.AI](https://learn.microsoft.com/dotnet/ai/ai-extensions) for the chat client.
     * Configures the `IChatClient` to use automatic tool (function) invocation.
@@ -5113,7 +5085,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * The server processes the query and returns a response.
     * The response is displayed to the user.
     
-    ### Running the Client
+    #### Running the Client
     
     To run your client with any MCP server:
     
@@ -5145,7 +5117,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
   </Tab>
 </Tabs>
 
-### Next steps
+#### Next steps
 
 <CardGroup cols={2}>
   <Card title="Example servers" icon="grid" href="/examples">
@@ -5165,11 +5137,11 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
   </Card>
 </CardGroup>
 
-## FAQs
+# FAQs
 
 > Explaining MCP and why it matters in simple terms
 
-### What is MCP?
+## What is MCP?
 
 MCP (Model Context Protocol) is a standard way for AI applications and agents to connect to and work with your data sources (e.g. local files, databases, or content repositories) and tools (e.g. GitHub, Google Maps, or Puppeteer).
 
@@ -5177,9 +5149,9 @@ Think of MCP as a universal adapter for AI applications, similar to what USB-C i
 
 Before USB-C, you needed different cables for different connections. Similarly, before MCP, developers had to build custom connections to each data source or tool they wanted their AI application to work with—a time-consuming process that often resulted in limited functionality. Now, with MCP, developers can easily add connections to their AI applications, making their applications much more powerful from day one.
 
-### Why does MCP matter?
+## Why does MCP matter?
 
-#### For AI application users
+### For AI application users
 
 MCP means your AI applications can access the information and tools you work with every day, making them much more helpful. Rather than AI being limited to what it already knows about, it can now understand your specific documents, data, and work context.
 
@@ -5193,7 +5165,7 @@ By using connections to data sources powered by MCP, the AI assistant can:
 * Understand who needs follow-ups based on the notes
 * Connect to your calendar through another MCP server to schedule the meetings automatically
 
-#### For developers
+### For developers
 
 MCP reduces development time and complexity when building AI applications that need to access various data sources. With MCP, developers can focus on building great AI experiences rather than repeatedly creating custom connectors.
 
@@ -5203,7 +5175,7 @@ MCP simplifies this by enabling developers to build MCP servers for data sources
 
 This open source ecosystem of MCP servers means developers can leverage existing work rather than starting from scratch, making it easier to build powerful AI applications that seamlessly integrate with the tools and data sources their users already rely on.
 
-### How does MCP work?
+## How does MCP work?
 
 <Frame>
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/mcp-simple-diagram.png" />
@@ -5218,7 +5190,7 @@ MCP creates a bridge between your AI applications and your data through a straig
 
 This modular system means new capabilities can be added without changing AI applications themselves—just like adding new accessories to your computer without upgrading your entire system.
 
-### Who creates and maintains MCP servers?
+## Who creates and maintains MCP servers?
 
 MCP servers are developed and maintained by:
 
