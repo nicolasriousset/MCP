@@ -11,9 +11,9 @@ All original content, concepts, and intellectual property belong to their respec
 
 ## Download eBooks
 
-| MCP Protocol revision | MarkDown                                                     | ePub                                           | PDF                                          |
-| --------------------- | ------------------------------------------------------------ | ---------------------------------------------- | -------------------------------------------- |
-| 2025-06-18            | [concepts and tutorials.md](rev2025-06-18/MCP - concepts and tutorials.md)<br/>[specification.md](rev2025-06-18/MCP - specification.md) | [concepts and tutorials.epub](rev2025-06-18/MCP - concepts and tutorials.epub)<br/>[specification.epub](rev2025-06-18/MCP - specification.epub) | [concepts and tutorials.pdf](rev2025-06-18/MCP - concepts and tutorials.pdf)<br/>[specification.pdf](rev2025-06-18/MCP - specification.pdf) |
+| MCP Protocol revision | MarkDown                                                     | ePub                                                         | PDF                                                          |
+| --------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 2025-06-18            | [concepts and tutorials.md](rev2025-06-18/MCP - concepts and tutorials.md), [specification.md](rev2025-06-18/MCP - specification.md) | [concepts and tutorials.epub](rev2025-06-18/MCP - concepts and tutorials.epub), [specification.epub](rev2025-06-18/MCP - specification.epub) | [concepts and tutorials.pdf](rev2025-06-18/MCP - concepts and tutorials.pdf), [specification.pdf](rev2025-06-18/MCP - specification.pdf) |
 
 ## Why this project exists
 
