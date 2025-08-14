@@ -180,8 +180,7 @@ The key participants in the MCP architecture are:
 * **MCP Server**: A program that provides context to MCP clients
 
 **For example**: Visual Studio Code acts as an MCP host. When Visual Studio Code establishes a connection to an MCP server, such as the [Sentry MCP server](https://docs.sentry.io/product/sentry-mcp/), the Visual Studio Code runtime instantiates an MCP client object that maintains the connection to the Sentry MCP server.
-When Visual Studio Code subsequently connects to another MCP server, such as the [local filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem), the Visual Studio Code runtime instantiates an additional MCP client object to maintain this connection, hence maintaining a one-to-one
-relationship of MCP clients to MCP servers.
+When Visual Studio Code subsequently connects to another MCP server, such as the [local filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem), the Visual Studio Code runtime instantiates an additional MCP client object to maintain this connection, hence maintaining a one-to-one relationship of MCP clients to MCP servers.
 
 ```mermaid
 graph TB
@@ -207,15 +206,7 @@ graph TB
     style Server3 fill:#f3e5f5
 ```
 
-Note that **MCP server** refers to the program that serves context data, regardless of
-where it runs. MCP servers can execute locally or remotely. For example, when
-Claude Desktop launches the [filesystem
-server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem),
-the server runs locally on the same machine because it uses the STDIO
-transport. This is commonly referred to as a "local" MCP server. The official
-[Sentry MCP server](https://docs.sentry.io/product/sentry-mcp/) runs on the
-Sentry platform, and uses the Streamable HTTP transport. This is commonly
-referred to as a "remote" MCP server.
+Note that **MCP server** refers to the program that serves context data, regardless of where it runs. MCP servers can execute locally or remotely. For example, when Claude Desktop launches the [filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem), the server runs locally on the same machine because it uses the STDIO transport. This is commonly referred to as a "local" MCP server. The official [Sentry MCP server](https://docs.sentry.io/product/sentry-mcp/) runs on the Sentry platform, and uses the Streamable HTTP transport. This is commonly referred to as a "remote" MCP server.
 
 #### Layers
 
@@ -292,320 +283,316 @@ The protocol supports real-time notifications to enable dynamic updates between 
 
 This section provides a step-by-step walkthrough of an MCP client-server interaction, focusing on the data layer protocol. We'll demonstrate the lifecycle sequence, tool operations, and notifications using JSON-RPC 2.0 messages.
 
-<Steps>
-  <Step title="Initialization (Lifecycle Management)">
-    MCP begins with lifecycle management through a capability negotiation handshake. As described in the [lifecycle management](#lifecycle-management) section, the client sends an `initialize` request to establish the connection and negotiate supported features.
 
-    <CodeGroup>
-      ```json Request
-      {
-        "jsonrpc": "2.0",
-        "id": 1,
-        "method": "initialize",
-        "params": {
-          "protocolVersion": "2025-06-18",
-          "capabilities": {
-            "elicitation": {}
-          },
-          "clientInfo": {
-            "name": "example-client",
-            "version": "1.0.0"
-          }
-        }
-      }
-      ```
-    
-      ```json Response
-      {
-        "jsonrpc": "2.0",
-        "id": 1,
-        "result": {
-          "protocolVersion": "2025-06-18",
-          "capabilities": {
-            "tools": {
-              "listChanged": true
-            },
-            "resources": {}
-          },
-          "serverInfo": {
-            "name": "example-server",
-            "version": "1.0.0"
-          }
-        }
-      }
-      ```
-    </CodeGroup>
-    
-    ##### Understanding the Initialization Exchange
-    
-    The initialization process is a key part of MCP's lifecycle management and serves several critical purposes:
-    
-    1. **Protocol Version Negotiation**: The `protocolVersion` field (e.g., "2025-06-18") ensures both client and server are using compatible protocol versions. This prevents communication errors that could occur when different versions attempt to interact. If a mutually compatible version is not negotiated, the connection should be terminated.
-    
-    2. **Capability Discovery**: The `capabilities` object allows each party to declare what features they support, including which [primitives](#primitives) they can handle (tools, resources, prompts) and whether they support features like [notifications](#notifications). This enables efficient communication by avoiding unsupported operations.
-    
-    3. **Identity Exchange**: The `clientInfo` and `serverInfo` objects provide identification and versioning information for debugging and compatibility purposes.
-    
-    In this example, the capability negotiation demonstrates how MCP primitives are declared:
-    
-    **Client Capabilities**:
-    
-    * `"elicitation": {}` - The client declares it can work with user interaction requests (can receive `elicitation/create` method calls)
-    
-    **Server Capabilities**:
-    
-    * `"tools": {"listChanged": true}` - The server supports the tools primitive AND can send `tools/list_changed` notifications when its tool list changes
-    * `"resources": {}` - The server also supports the resources primitive (can handle `resources/list` and `resources/read` methods)
-    
-    After successful initialization, the client sends a notification to indicate it's ready:
-    
-    ```json Notification
-    {
-      "jsonrpc": "2.0",
-      "method": "notifications/initialized"
-    }
-    ```
-    
-    ##### How This Works in AI Applications
-    
-    During initialization, the AI application's MCP client manager establishes connections to configured servers and stores their capabilities for later use. The application uses this information to determine which servers can provide specific types of functionality (tools, resources, prompts) and whether they support real-time updates.
-    
-    ```python Pseudo-code for AI application initialization
-    # Pseudo Code
-    async with stdio_client(server_config) as (read, write):
-        async with ClientSession(read, write) as session:
-            init_response = await session.initialize()
-            if init_response.capabilities.tools:
-                app.register_mcp_server(session, supports_tools=True)
-            app.set_server_ready(session)
-    ```
-  </Step>
+##### Initialization (Lifecycle Management)
+MCP begins with lifecycle management through a capability negotiation handshake. As described in the [lifecycle management](#lifecycle-management) section, the client sends an `initialize` request to establish the connection and negotiate supported features.
 
-  <Step title="Tool Discovery (Primitives)">
-    Now that the connection is established, the client can discover available tools by sending a `tools/list` request. This request is fundamental to MCP's tool discovery mechanism — it allows clients to understand what tools are available on the server before attempting to use them.
+<CodeGroup>
+  ```json Request
+  {
+	"jsonrpc": "2.0",
+	"id": 1,
+	"method": "initialize",
+	"params": {
+	  "protocolVersion": "2025-06-18",
+	  "capabilities": {
+		"elicitation": {}
+	  },
+	  "clientInfo": {
+		"name": "example-client",
+		"version": "1.0.0"
+	  }
+	}
+  }
+  ```
 
-    <CodeGroup>
-      ```json Request
-      {
-        "jsonrpc": "2.0",
-        "id": 2,
-        "method": "tools/list"
-      }
-      ```
-    
-      ```json Response
-      {
-        "jsonrpc": "2.0",
-        "id": 2,
-        "result": {
-          "tools": [
-            {
-              "name": "calculator_arithmetic",
-              "title": "Calculator",
-              "description": "Perform mathematical calculations including basic arithmetic, trigonometric functions, and algebraic operations",
-              "inputSchema": {
-                "type": "object",
-                "properties": {
-                  "expression": {
-                    "type": "string",
-                    "description": "Mathematical expression to evaluate (e.g., '2 + 3 * 4', 'sin(30)', 'sqrt(16)')"
-                  }
-                },
-                "required": ["expression"]
-              }
-            },
-            {
-              "name": "weather_current",
-              "title": "Weather Information",
-              "description": "Get current weather information for any location worldwide",
-              "inputSchema": {
-                "type": "object",
-                "properties": {
-                  "location": {
-                    "type": "string",
-                    "description": "City name, address, or coordinates (latitude,longitude)"
-                  },
-                  "units": {
-                    "type": "string",
-                    "enum": ["metric", "imperial", "kelvin"],
-                    "description": "Temperature units to use in response",
-                    "default": "metric"
-                  }
-                },
-                "required": ["location"]
-              }
-            }
-          ]
-        }
-      }
-      ```
-    </CodeGroup>
-    
-    ##### Understanding the Tool Discovery Request
-    
-    The `tools/list` request is simple, containing no parameters.
-    
-    ##### Understanding the Tool Discovery Response
-    
-    The response contains a `tools` array that provides comprehensive metadata about each available tool. This array-based structure allows servers to expose multiple tools simultaneously while maintaining clear boundaries between different functionalities.
-    
-    Each tool object in the response includes several key fields:
-    
-    * **`name`**: A unique identifier for the tool within the server's namespace. This serves as the primary key for tool execution and should follow a clear naming pattern (e.g., `calculator_arithmetic` rather than just `calculate`)
-    * **`title`**: A human-readable display name for the tool that clients can show to users
-    * **`description`**: Detailed explanation of what the tool does and when to use it
-    * **`inputSchema`**: A JSON Schema that defines the expected input parameters, enabling type validation and providing clear documentation about required and optional parameters
-    
-    ##### How This Works in AI Applications
-    
-    The AI application fetches available tools from all connected MCP servers and combines them into a unified tool registry that the language model can access. This allows the LLM to understand what actions it can perform and automatically generates the appropriate tool calls during conversations.
-    
-    ```python Pseudo-code for AI application tool discovery
-    # Pseudo-code using MCP Python SDK patterns
-    available_tools = []
-    for session in app.mcp_server_sessions():
-        tools_response = await session.list_tools()
-        available_tools.extend(tools_response.tools)
-    conversation.register_available_tools(available_tools)
-    ```
-  </Step>
+  ```json Response
+  {
+	"jsonrpc": "2.0",
+	"id": 1,
+	"result": {
+	  "protocolVersion": "2025-06-18",
+	  "capabilities": {
+		"tools": {
+		  "listChanged": true
+		},
+		"resources": {}
+	  },
+	  "serverInfo": {
+		"name": "example-server",
+		"version": "1.0.0"
+	  }
+	}
+  }
+  ```
+</CodeGroup>
 
-  <Step title="Tool Execution (Primitives)">
-    The client can now execute a tool using the `tools/call` method. This demonstrates how MCP primitives are used in practice: after discovering available tools, the client can invoke them with appropriate arguments.
+###### Understanding the Initialization Exchange
 
-    ##### Understanding the Tool Execution Request
-    
-    The `tools/call` request follows a structured format that ensures type safety and clear communication between client and server. Note that we're using the proper tool name from the discovery response (`weather_current`) rather than a simplified name:
-    
-    <CodeGroup>
-      ```json Request
-      {
-        "jsonrpc": "2.0",
-        "id": 3,
-        "method": "tools/call",
-        "params": {
-          "name": "weather_current",
-          "arguments": {
-            "location": "San Francisco",
-            "units": "imperial"
-          }
-        }
-      }
-      ```
-    
-      ```json Response
-      {
-        "jsonrpc": "2.0",
-        "id": 3,
-        "result": {
-          "content": [
-            {
-              "type": "text",
-              "text": "Current weather in San Francisco: 68°F, partly cloudy with light winds from the west at 8 mph. Humidity: 65%"
-            }
-          ]
-        }
-      }
-      ```
-    </CodeGroup>
-    
-    ##### Key Elements of Tool Execution
-    
-    The request structure includes several important components:
-    
-    1. **`name`**: Must match exactly the tool name from the discovery response (`weather_current`). This ensures the server can correctly identify which tool to execute.
-    
-    2. **`arguments`**: Contains the input parameters as defined by the tool's `inputSchema`. In this example:
-    
-       * `location`: "San Francisco" (required parameter)
-       * `units`: "imperial" (optional parameter, defaults to "metric" if not specified)
-    
-    3. **JSON-RPC Structure**: Uses standard JSON-RPC 2.0 format with unique `id` for request-response correlation.
-    
-    ##### Understanding the Tool Execution Response
-    
-    The response demonstrates MCP's flexible content system:
-    
-    1. **`content` Array**: Tool responses return an array of content objects, allowing for rich, multi-format responses (text, images, resources, etc.)
-    
-    2. **Content Types**: Each content object has a `type` field. In this example, `"type": "text"` indicates plain text content, but MCP supports various content types for different use cases.
-    
-    3. **Structured Output**: The response provides actionable information that the AI application can use as context for language model interactions.
-    
-    This execution pattern allows AI applications to dynamically invoke server functionality and receive structured responses that can be integrated into conversations with language models.
-    
-    ##### How This Works in AI Applications
-    
-    When the language model decides to use a tool during a conversation, the AI application intercepts the tool call, routes it to the appropriate MCP server, executes it, and returns the results back to the LLM as part of the conversation flow. This enables the LLM to access real-time data and perform actions in the external world.
-    
-    ```python
-    # Pseudo-code for AI application tool execution
-    async def handle_tool_call(conversation, tool_name, arguments):
-        session = app.find_mcp_session_for_tool(tool_name)
-        result = await session.call_tool(tool_name, arguments)
-        conversation.add_tool_result(result.content)
-    ```
-  </Step>
+The initialization process is a key part of MCP's lifecycle management and serves several critical purposes:
 
-  <Step title="Real-time Updates (Notifications)">
-    MCP supports real-time notifications that enable servers to inform clients about changes without being explicitly requested. This demonstrates the notification system, a key feature that keeps MCP connections synchronized and responsive.
+1. **Protocol Version Negotiation**: The `protocolVersion` field (e.g., "2025-06-18") ensures both client and server are using compatible protocol versions. This prevents communication errors that could occur when different versions attempt to interact. If a mutually compatible version is not negotiated, the connection should be terminated.
 
-    ##### Understanding Tool List Change Notifications
-    
-    When the server's available tools change—such as when new functionality becomes available, existing tools are modified, or tools become temporarily unavailable—the server can proactively notify connected clients:
-    
-    ```json Request
-    {
-      "jsonrpc": "2.0",
-      "method": "notifications/tools/list_changed"
-    }
-    ```
-    
-    ##### Key Features of MCP Notifications
-    
-    1. **No Response Required**: Notice there's no `id` field in the notification. This follows JSON-RPC 2.0 notification semantics where no response is expected or sent.
-    
-    2. **Capability-Based**: This notification is only sent by servers that declared `"listChanged": true` in their tools capability during initialization (as shown in Step 1).
-    
-    3. **Event-Driven**: The server decides when to send notifications based on internal state changes, making MCP connections dynamic and responsive.
-    
-    ##### Client Response to Notifications
-    
-    Upon receiving this notification, the client typically reacts by requesting the updated tool list. This creates a refresh cycle that keeps the client's understanding of available tools current:
-    
-    ```json Request
-    {
-      "jsonrpc": "2.0",
-      "id": 4,
-      "method": "tools/list"
-    }
-    ```
-    
-    ##### Why Notifications Matter
-    
-    This notification system is crucial for several reasons:
-    
-    1. **Dynamic Environments**: Tools may come and go based on server state, external dependencies, or user permissions
-    2. **Efficiency**: Clients don't need to poll for changes; they're notified when updates occur
-    3. **Consistency**: Ensures clients always have accurate information about available server capabilities
-    4. **Real-time Collaboration**: Enables responsive AI applications that can adapt to changing contexts
-    
-    This notification pattern extends beyond tools to other MCP primitives, enabling comprehensive real-time synchronization between clients and servers.
-    
-    ##### How This Works in AI Applications
-    
-    When the AI application receives a notification about changed tools, it immediately refreshes its tool registry and updates the LLM's available capabilities. This ensures that ongoing conversations always have access to the most current set of tools, and the LLM can dynamically adapt to new functionality as it becomes available.
-    
-    ```python
-    # Pseudo-code for AI application notification handling
-    async def handle_tools_changed_notification(session):
-        tools_response = await session.list_tools()
-        app.update_available_tools(session, tools_response.tools)
-        if app.conversation.is_active():
-            app.conversation.notify_llm_of_new_capabilities()
-    ```
-  </Step>
-</Steps>
+2. **Capability Discovery**: The `capabilities` object allows each party to declare what features they support, including which [primitives](#primitives) they can handle (tools, resources, prompts) and whether they support features like [notifications](#notifications). This enables efficient communication by avoiding unsupported operations.
+
+3. **Identity Exchange**: The `clientInfo` and `serverInfo` objects provide identification and versioning information for debugging and compatibility purposes.
+
+In this example, the capability negotiation demonstrates how MCP primitives are declared:
+
+**Client Capabilities**:
+
+* `"elicitation": {}` - The client declares it can work with user interaction requests (can receive `elicitation/create` method calls)
+
+**Server Capabilities**:
+
+* `"tools": {"listChanged": true}` - The server supports the tools primitive AND can send `tools/list_changed` notifications when its tool list changes
+* `"resources": {}` - The server also supports the resources primitive (can handle `resources/list` and `resources/read` methods)
+
+After successful initialization, the client sends a notification to indicate it's ready:
+
+```json Notification
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/initialized"
+}
+```
+
+###### How This Works in AI Applications
+
+During initialization, the AI application's MCP client manager establishes connections to configured servers and stores their capabilities for later use. The application uses this information to determine which servers can provide specific types of functionality (tools, resources, prompts) and whether they support real-time updates.
+
+```python Pseudo-code for AI application initialization
+# Pseudo Code
+async with stdio_client(server_config) as (read, write):
+	async with ClientSession(read, write) as session:
+		init_response = await session.initialize()
+		if init_response.capabilities.tools:
+			app.register_mcp_server(session, supports_tools=True)
+		app.set_server_ready(session)
+```
+
+##### Tool Discovery (Primitives)
+Now that the connection is established, the client can discover available tools by sending a `tools/list` request. This request is fundamental to MCP's tool discovery mechanism — it allows clients to understand what tools are available on the server before attempting to use them.
+
+<CodeGroup>
+  ```json Request
+  {
+	"jsonrpc": "2.0",
+	"id": 2,
+	"method": "tools/list"
+  }
+  ```
+
+  ```json Response
+  {
+	"jsonrpc": "2.0",
+	"id": 2,
+	"result": {
+	  "tools": [
+		{
+		  "name": "calculator_arithmetic",
+		  "title": "Calculator",
+		  "description": "Perform mathematical calculations including basic arithmetic, trigonometric functions, and algebraic operations",
+		  "inputSchema": {
+			"type": "object",
+			"properties": {
+			  "expression": {
+				"type": "string",
+				"description": "Mathematical expression to evaluate (e.g., '2 + 3 * 4', 'sin(30)', 'sqrt(16)')"
+			  }
+			},
+			"required": ["expression"]
+		  }
+		},
+		{
+		  "name": "weather_current",
+		  "title": "Weather Information",
+		  "description": "Get current weather information for any location worldwide",
+		  "inputSchema": {
+			"type": "object",
+			"properties": {
+			  "location": {
+				"type": "string",
+				"description": "City name, address, or coordinates (latitude,longitude)"
+			  },
+			  "units": {
+				"type": "string",
+				"enum": ["metric", "imperial", "kelvin"],
+				"description": "Temperature units to use in response",
+				"default": "metric"
+			  }
+			},
+			"required": ["location"]
+		  }
+		}
+	  ]
+	}
+  }
+  ```
+</CodeGroup>
+
+###### Understanding the Tool Discovery Request
+
+The `tools/list` request is simple, containing no parameters.
+
+###### Understanding the Tool Discovery Response
+
+The response contains a `tools` array that provides comprehensive metadata about each available tool. This array-based structure allows servers to expose multiple tools simultaneously while maintaining clear boundaries between different functionalities.
+
+Each tool object in the response includes several key fields:
+
+* **`name`**: A unique identifier for the tool within the server's namespace. This serves as the primary key for tool execution and should follow a clear naming pattern (e.g., `calculator_arithmetic` rather than just `calculate`)
+* **`title`**: A human-readable display name for the tool that clients can show to users
+* **`description`**: Detailed explanation of what the tool does and when to use it
+* **`inputSchema`**: A JSON Schema that defines the expected input parameters, enabling type validation and providing clear documentation about required and optional parameters
+
+###### How This Works in AI Applications
+
+The AI application fetches available tools from all connected MCP servers and combines them into a unified tool registry that the language model can access. This allows the LLM to understand what actions it can perform and automatically generates the appropriate tool calls during conversations.
+
+```python Pseudo-code for AI application tool discovery
+# Pseudo-code using MCP Python SDK patterns
+available_tools = []
+for session in app.mcp_server_sessions():
+	tools_response = await session.list_tools()
+	available_tools.extend(tools_response.tools)
+conversation.register_available_tools(available_tools)
+```
+
+##### Tool Execution (Primitives)
+The client can now execute a tool using the `tools/call` method. This demonstrates how MCP primitives are used in practice: after discovering available tools, the client can invoke them with appropriate arguments.
+
+###### Understanding the Tool Execution Request
+
+The `tools/call` request follows a structured format that ensures type safety and clear communication between client and server. Note that we're using the proper tool name from the discovery response (`weather_current`) rather than a simplified name:
+
+<CodeGroup>
+  ```json Request
+  {
+	"jsonrpc": "2.0",
+	"id": 3,
+	"method": "tools/call",
+	"params": {
+	  "name": "weather_current",
+	  "arguments": {
+		"location": "San Francisco",
+		"units": "imperial"
+	  }
+	}
+  }
+  ```
+
+  ```json Response
+  {
+	"jsonrpc": "2.0",
+	"id": 3,
+	"result": {
+	  "content": [
+		{
+		  "type": "text",
+		  "text": "Current weather in San Francisco: 68°F, partly cloudy with light winds from the west at 8 mph. Humidity: 65%"
+		}
+	  ]
+	}
+  }
+  ```
+</CodeGroup>
+
+###### Key Elements of Tool Execution
+
+The request structure includes several important components:
+
+1. **`name`**: Must match exactly the tool name from the discovery response (`weather_current`). This ensures the server can correctly identify which tool to execute.
+
+2. **`arguments`**: Contains the input parameters as defined by the tool's `inputSchema`. In this example:
+
+   * `location`: "San Francisco" (required parameter)
+   * `units`: "imperial" (optional parameter, defaults to "metric" if not specified)
+
+3. **JSON-RPC Structure**: Uses standard JSON-RPC 2.0 format with unique `id` for request-response correlation.
+
+###### Understanding the Tool Execution Response
+
+The response demonstrates MCP's flexible content system:
+
+1. **`content` Array**: Tool responses return an array of content objects, allowing for rich, multi-format responses (text, images, resources, etc.)
+
+2. **Content Types**: Each content object has a `type` field. In this example, `"type": "text"` indicates plain text content, but MCP supports various content types for different use cases.
+
+3. **Structured Output**: The response provides actionable information that the AI application can use as context for language model interactions.
+
+This execution pattern allows AI applications to dynamically invoke server functionality and receive structured responses that can be integrated into conversations with language models.
+
+###### How This Works in AI Applications
+
+When the language model decides to use a tool during a conversation, the AI application intercepts the tool call, routes it to the appropriate MCP server, executes it, and returns the results back to the LLM as part of the conversation flow. This enables the LLM to access real-time data and perform actions in the external world.
+
+```python
+# Pseudo-code for AI application tool execution
+async def handle_tool_call(conversation, tool_name, arguments):
+	session = app.find_mcp_session_for_tool(tool_name)
+	result = await session.call_tool(tool_name, arguments)
+	conversation.add_tool_result(result.content)
+```
+
+##### Real-time Updates (Notifications)
+MCP supports real-time notifications that enable servers to inform clients about changes without being explicitly requested. This demonstrates the notification system, a key feature that keeps MCP connections synchronized and responsive.
+
+###### Understanding Tool List Change Notifications
+
+When the server's available tools change—such as when new functionality becomes available, existing tools are modified, or tools become temporarily unavailable—the server can proactively notify connected clients:
+
+```json Request
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/tools/list_changed"
+}
+```
+
+###### Key Features of MCP Notifications
+
+1. **No Response Required**: Notice there's no `id` field in the notification. This follows JSON-RPC 2.0 notification semantics where no response is expected or sent.
+
+2. **Capability-Based**: This notification is only sent by servers that declared `"listChanged": true` in their tools capability during initialization (as shown in Step 1).
+
+3. **Event-Driven**: The server decides when to send notifications based on internal state changes, making MCP connections dynamic and responsive.
+
+###### Client Response to Notifications
+
+Upon receiving this notification, the client typically reacts by requesting the updated tool list. This creates a refresh cycle that keeps the client's understanding of available tools current:
+
+```json Request
+{
+  "jsonrpc": "2.0",
+  "id": 4,
+  "method": "tools/list"
+}
+```
+
+###### Why Notifications Matter
+
+This notification system is crucial for several reasons:
+
+1. **Dynamic Environments**: Tools may come and go based on server state, external dependencies, or user permissions
+2. **Efficiency**: Clients don't need to poll for changes; they're notified when updates occur
+3. **Consistency**: Ensures clients always have accurate information about available server capabilities
+4. **Real-time Collaboration**: Enables responsive AI applications that can adapt to changing contexts
+
+This notification pattern extends beyond tools to other MCP primitives, enabling comprehensive real-time synchronization between clients and servers.
+
+###### How This Works in AI Applications
+
+When the AI application receives a notification about changed tools, it immediately refreshes its tool registry and updates the LLM's available capabilities. This ensures that ongoing conversations always have access to the most current set of tools, and the LLM can dynamically adapt to new functionality as it becomes available.
+
+```python
+# Pseudo-code for AI application notification handling
+async def handle_tools_changed_notification(session):
+	tools_response = await session.list_tools()
+	app.update_available_tools(session, tools_response.tools)
+	if app.conversation.is_active():
+		app.conversation.notify_llm_of_new_capabilities()
+```
+
 
 ## Server Concepts
 
@@ -1093,14 +1080,10 @@ The **current** protocol version is [**2025-06-18**](/specification/2025-06-18/)
 
 ### Negotiation
 
-Version negotiation happens during
-[initialization](/specification/2025-06-18/basic/lifecycle#initialization). Clients and
-servers **MAY** support multiple protocol versions simultaneously, but they **MUST**
+Version negotiation happens during [initialization](/specification/2025-06-18/basic/lifecycle#initialization). Clients and servers **MAY** support multiple protocol versions simultaneously, but they **MUST**
 agree on a single version to use for the session.
 
-The protocol provides appropriate error handling if version negotiation fails, allowing
-clients to gracefully terminate connections when they cannot find a version compatible
-with the server.
+The protocol provides appropriate error handling if version negotiation fails, allowing clients to gracefully terminate connections when they cannot find a version compatible with the server.
 
 # Tutorials
 
@@ -1133,63 +1116,46 @@ With Custom Connectors, you can:
 
 The process of connecting Claude to a remote MCP server involves adding a Custom Connector through the [Claude interface](https://claude.ai/). This establishes a secure connection between Claude and your chosen remote server.
 
-<Steps>
-  <Step title="Navigate to Connector Settings">
-    Open Claude in your browser and navigate to the settings page. You can access this by clicking on your profile icon and selecting "Settings" from the dropdown menu. Once in settings, locate and click on the "Connectors" section in the sidebar.
 
-    This will display your currently configured connectors and provide options to add new ones.
-  </Step>
+##### Navigate to Connector Settings
+Open Claude in your browser and navigate to the settings page. You can access this by clicking on your profile icon and selecting "Settings" from the dropdown menu. Once in settings, locate and click on the "Connectors" section in the sidebar.
 
-  <Step title="Add a Custom Connector">
-    In the Connectors section, scroll to the bottom where you'll find the "Add custom connector" button. Click this button to begin the connection process.
+This will display your currently configured connectors and provide options to add new ones.
 
-    <Frame>
-      <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/1-add-connector.png" alt="Add custom connector button in Claude settings" />
-    </Frame>
-    
-    A dialog will appear prompting you to enter the remote MCP server URL. This URL should be provided by the server developer or administrator. Enter the complete URL, ensuring it includes the proper protocol (https\://) and any necessary path components.
-    
-    <Frame>
-      <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/2-connect.png" alt="Dialog for entering remote MCP server URL" />
-    </Frame>
-    
-    After entering the URL, click "Add" to proceed with the connection.
-  </Step>
+##### Add a Custom Connector
+In the Connectors section, scroll to the bottom where you'll find the "Add custom connector" button. Click this button to begin the connection process.
 
-  <Step title="Complete Authentication">
-    Most remote MCP servers require authentication to ensure secure access to their resources. The authentication process varies depending on the server implementation but commonly involves OAuth, API keys, or username/password combinations.
+  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/1-add-connector.png" alt="Add custom connector button in Claude settings" />
 
-    <Frame>
-      <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/3-auth.png" alt="Authentication screen for remote MCP server" />
-    </Frame>
-    
-    Follow the authentication prompts provided by the server. This may redirect you to a third-party authentication provider or display a form within Claude. Once authentication is complete, Claude will establish a secure connection to the remote server.
-  </Step>
+A dialog will appear prompting you to enter the remote MCP server URL. This URL should be provided by the server developer or administrator. Enter the complete URL, ensuring it includes the proper protocol (https\://) and any necessary path components.
 
-  <Step title="Access Resources and Prompts">
-    After successful connection, the remote server's resources and prompts become available in your Claude conversations. You can access these by clicking the paperclip icon in the message input area, which opens the attachment menu.
+  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/2-connect.png" alt="Dialog for entering remote MCP server URL" />
 
-    <Frame>
-      <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/4-select-resources-menu.png" alt="Attachment menu showing available resources" />
-    </Frame>
-    
-    The menu displays all available resources and prompts from your connected servers. Select the items you want to include in your conversation. These resources provide Claude with context and information from your external tools.
-    
-    <Frame>
-      <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/5-select-prompts-resources.png" alt="Selecting specific resources and prompts from the menu" />
-    </Frame>
-  </Step>
+After entering the URL, click "Add" to proceed with the connection.
 
-  <Step title="Configure Tool Permissions">
-    Remote MCP servers often expose multiple tools with varying capabilities. You can control which tools Claude is allowed to use by configuring permissions in the connector settings. This ensures Claude only performs actions you've explicitly authorized.
+##### Complete Authentication
+Most remote MCP servers require authentication to ensure secure access to their resources. The authentication process varies depending on the server implementation but commonly involves OAuth, API keys, or username/password combinations.
 
-    <Frame>
-      <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/6-configure-tools.png" alt="Tool permission configuration interface" />
-    </Frame>
-    
-    Navigate back to the Connectors settings and click on your connected server. Here you can enable or disable specific tools, set usage limits, and configure other security parameters according to your needs.
-  </Step>
-</Steps>
+  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/3-auth.png" alt="Authentication screen for remote MCP server" />
+
+Follow the authentication prompts provided by the server. This may redirect you to a third-party authentication provider or display a form within Claude. Once authentication is complete, Claude will establish a secure connection to the remote server.
+
+##### Access Resources and Prompts
+After successful connection, the remote server's resources and prompts become available in your Claude conversations. You can access these by clicking the paperclip icon in the message input area, which opens the attachment menu.
+
+  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/4-select-resources-menu.png" alt="Attachment menu showing available resources" />
+
+The menu displays all available resources and prompts from your connected servers. Select the items you want to include in your conversation. These resources provide Claude with context and information from your external tools.
+
+  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/5-select-prompts-resources.png" alt="Selecting specific resources and prompts from the menu" />
+
+##### Configure Tool Permissions
+Remote MCP servers often expose multiple tools with varying capabilities. You can control which tools Claude is allowed to use by configuring permissions in the connector settings. This ensures Claude only performs actions you've explicitly authorized.
+
+  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/6-configure-tools.png" alt="Tool permission configuration interface" />
+
+Navigate back to the Connectors settings and click on your connected server. Here you can enable or disable specific tools, set usage limits, and configure other security parameters according to your needs.
+
 
 #### Best Practices for Using Remote MCP Servers
 
@@ -1233,9 +1199,9 @@ Model Context Protocol (MCP) servers extend AI applications' capabilities by pro
 
 This guide demonstrates how to connect to local MCP servers using Claude Desktop as an example, one of the [many clients that support MCP](/clients). While we focus on Claude Desktop's implementation, the concepts apply broadly to other MCP-compatible clients. By the end of this tutorial, Claude will be able to interact with files on your computer, create new documents, organize folders, and search through your file system—all with your explicit permission for each action.
 
-<Frame>
+
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-filesystem.png" alt="Claude Desktop with filesystem integration showing file management capabilities" />
-</Frame>
+
 
 #### Prerequisites
 
@@ -1272,108 +1238,99 @@ All actions require your explicit approval before execution, ensuring you mainta
 
 The process involves configuring Claude Desktop to automatically start the Filesystem Server whenever you launch the application. This configuration is done through a JSON file that tells Claude Desktop which servers to run and how to connect to them.
 
-<Steps>
-  <Step title="Open Claude Desktop Settings">
-    Start by accessing the Claude Desktop settings. Click on the Claude menu in your system's menu bar (not the settings within the Claude window itself) and select "Settings..."
 
-    On macOS, this appears in the top menu bar:
-    
-    <Frame style={{ textAlign: "center" }}>
-      <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-menu.png" width="400" alt="Claude Desktop menu showing Settings option" />
-    </Frame>
-    
-    This opens the Claude Desktop configuration window, which is separate from your Claude account settings.
-  </Step>
+##### Open Claude Desktop Settings
+Start by accessing the Claude Desktop settings. Click on the Claude menu in your system's menu bar (not the settings within the Claude window itself) and select "Settings..."
 
-  <Step title="Access Developer Settings">
-    In the Settings window, navigate to the "Developer" tab in the left sidebar. This section contains options for configuring MCP servers and other developer features.
+On macOS, this appears in the top menu bar:
 
-    Click the "Edit Config" button to open the configuration file:
-    
-    <Frame>
-      <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-developer.png" alt="Developer settings showing Edit Config button" />
-    </Frame>
-    
-    This action creates a new configuration file if one doesn't exist, or opens your existing configuration. The file is located at:
-    
-    * **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-    * **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-  </Step>
+<img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-menu.png" width="400" alt="Claude Desktop menu showing Settings option" />
 
-  <Step title="Configure the Filesystem Server">
-    Replace the contents of the configuration file with the following JSON structure. This configuration tells Claude Desktop to start the Filesystem Server with access to specific directories:
 
-    <CodeGroup>
-      ```json macOS
-      {
-        "mcpServers": {
-          "filesystem": {
-            "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-filesystem",
-              "/Users/username/Desktop",
-              "/Users/username/Downloads"
-            ]
-          }
-        }
-      }
-      ```
-    
-      ```json Windows
-      {
-        "mcpServers": {
-          "filesystem": {
-            "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-filesystem",
-              "C:\\Users\\username\\Desktop",
-              "C:\\Users\\username\\Downloads"
-            ]
-          }
-        }
-      }
-      ```
-    </CodeGroup>
-    
-    Replace `username` with your actual computer username. The paths listed in the `args` array specify which directories the Filesystem Server can access. You can modify these paths or add additional directories as needed.
-    
-    <Tip>
-      **Understanding the Configuration**
-    
-      * `"filesystem"`: A friendly name for the server that appears in Claude Desktop
-      * `"command": "npx"`: Uses Node.js's npx tool to run the server
-      * `"-y"`: Automatically confirms the installation of the server package
-      * `"@modelcontextprotocol/server-filesystem"`: The package name of the Filesystem Server
-      * The remaining arguments: Directories the server is allowed to access
-    </Tip>
-    
-    <Warning>
-      **Security Consideration**
-    
-      Only grant access to directories you're comfortable with Claude reading and modifying. The server runs with your user account permissions, so it can perform any file operations you can perform manually.
-    </Warning>
-  </Step>
+This opens the Claude Desktop configuration window, which is separate from your Claude account settings.
 
-  <Step title="Restart Claude Desktop">
-    After saving the configuration file, completely quit Claude Desktop and restart it. The application needs to restart to load the new configuration and start the MCP server.
+##### Access Developer Settings
+In the Settings window, navigate to the "Developer" tab in the left sidebar. This section contains options for configuring MCP servers and other developer features.
 
-    Upon successful restart, you'll see an MCP server indicator <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/claude-desktop-mcp-slider.svg" style={{display: 'inline', margin: 0, height: '1.3em'}} /> in the bottom-right corner of the conversation input box:
-    
-    <Frame>
-      <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-slider.png" alt="Claude Desktop interface showing MCP server indicator" />
-    </Frame>
-    
-    Click on this indicator to view the available tools provided by the Filesystem Server:
-    
-    <Frame style={{ textAlign: "center" }}>
-      <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-tools.png" width="400" alt="Available filesystem tools in Claude Desktop" />
-    </Frame>
-    
-    If the server indicator doesn't appear, refer to the [Troubleshooting](#troubleshooting) section for debugging steps.
-  </Step>
-</Steps>
+Click the "Edit Config" button to open the configuration file:
+
+
+  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-developer.png" alt="Developer settings showing Edit Config button" />
+
+This action creates a new configuration file if one doesn't exist, or opens your existing configuration. The file is located at:
+
+* **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+* **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+##### Configure the Filesystem Server
+Replace the contents of the configuration file with the following JSON structure. This configuration tells Claude Desktop to start the Filesystem Server with access to specific directories:
+
+<CodeGroup>
+  ```json macOS
+  {
+	"mcpServers": {
+	  "filesystem": {
+		"command": "npx",
+		"args": [
+		  "-y",
+		  "@modelcontextprotocol/server-filesystem",
+		  "/Users/username/Desktop",
+		  "/Users/username/Downloads"
+		]
+	  }
+	}
+  }
+  ```
+
+  ```json Windows
+  {
+	"mcpServers": {
+	  "filesystem": {
+		"command": "npx",
+		"args": [
+		  "-y",
+		  "@modelcontextprotocol/server-filesystem",
+		  "C:\\Users\\username\\Desktop",
+		  "C:\\Users\\username\\Downloads"
+		]
+	  }
+	}
+  }
+  ```
+</CodeGroup>
+
+Replace `username` with your actual computer username. The paths listed in the `args` array specify which directories the Filesystem Server can access. You can modify these paths or add additional directories as needed.
+
+<Tip>
+  **Understanding the Configuration**
+
+  * `"filesystem"`: A friendly name for the server that appears in Claude Desktop
+  * `"command": "npx"`: Uses Node.js's npx tool to run the server
+  * `"-y"`: Automatically confirms the installation of the server package
+  * `"@modelcontextprotocol/server-filesystem"`: The package name of the Filesystem Server
+  * The remaining arguments: Directories the server is allowed to access
+</Tip>
+
+<Warning>
+  **Security Consideration**
+
+  Only grant access to directories you're comfortable with Claude reading and modifying. The server runs with your user account permissions, so it can perform any file operations you can perform manually.
+</Warning>
+
+##### Restart Claude Desktop
+After saving the configuration file, completely quit Claude Desktop and restart it. The application needs to restart to load the new configuration and start the MCP server.
+
+Upon successful restart, you'll see an MCP server indicator <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/claude-desktop-mcp-slider.svg" style={{display: 'inline', margin: 0, height: '1.3em'}} /> in the bottom-right corner of the conversation input box:
+
+  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-slider.png" alt="Claude Desktop interface showing MCP server indicator" />
+
+Click on this indicator to view the available tools provided by the Filesystem Server:
+
+<img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-tools.png" width="400" alt="Available filesystem tools in Claude Desktop" />
+
+
+If the server indicator doesn't appear, refer to the [Troubleshooting](#troubleshooting) section for debugging steps.
+
 
 #### Using the Filesystem Server
 
@@ -1389,9 +1346,8 @@ With the Filesystem Server connected, Claude can now interact with your file sys
 
 Before executing any file system operation, Claude will request your approval. This ensures you maintain control over all actions:
 
-<Frame style={{ textAlign: "center" }}>
-  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-approve.png" width="500" alt="Claude requesting approval to perform a file operation" />
-</Frame>
+<img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-approve.png" width="500" alt="Claude requesting approval to perform a file operation" />
+
 
 Review each request carefully before approving. You can always deny a request if you're not comfortable with the proposed action.
 
@@ -1523,13 +1479,13 @@ Many LLMs do not currently have the ability to fetch the forecast and severe wea
 
 We'll build a server that exposes two tools: `get_alerts` and `get_forecast`. Then we'll connect the server to an MCP host (in this case, Claude for Desktop):
 
-<Frame>
-  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/weather-alerts.png" />
-</Frame>
 
-<Frame>
+  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/weather-alerts.png" />
+
+
+
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/current-weather.png" />
-</Frame>
+
 
 <Note>
   Servers can connect to any client. We've chosen Claude for Desktop here for simplicity, but we also have guides on [building your own client](/quickstart/client) as well as a [list of other clients here](/clients).
@@ -3237,15 +3193,15 @@ This tutorial will primarily focus on tools.
 
 Let's make sure Claude for Desktop is picking up the two tools we've exposed in our `weather` server. You can do this by looking for the "Search and tools" <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/claude-desktop-mcp-slider.svg" style={{display: 'inline', margin: 0, height: '1.3em'}} /> icon:
 
-<Frame>
+
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/visual-indicator-mcp-tools.png" />
-</Frame>
+
 
 After clicking on the slider icon, you should see two tools listed:
 
-<Frame>
+
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/available-mcp-tools.png" />
-</Frame>
+
 
 If your server isn't being picked up by Claude for Desktop, proceed to the [Troubleshooting](#troubleshooting) section for debugging tips.
 
@@ -3254,13 +3210,13 @@ If the tool settings icon has shown up, you can now test your server by running 
 * What's the weather in Sacramento?
 * What are the active weather alerts in Texas?
 
-<Frame>
-  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/current-weather.png" />
-</Frame>
 
-<Frame>
+  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/current-weather.png" />
+
+
+
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/weather-alerts.png" />
-</Frame>
+
 
 <Note>
   Since this is the US National Weather service, the queries will only work for US locations.
@@ -3403,8 +3359,7 @@ A common way to start server packages from [NPM](https://npmjs.com) or [PyPi](ht
 
 ###### Inspecting locally developed servers
 
-To inspect servers locally developed or downloaded as a repository, the most common
-way is:
+To inspect servers locally developed or downloaded as a repository, the most common way is:
 
 <Tabs>
   <Tab title="TypeScript">
@@ -3429,9 +3384,8 @@ Please carefully read any attached README for the most accurate instructions.
 
 #### Feature overview
 
-<Frame caption="The MCP Inspector interface">
-  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/mcp-inspector.png" />
-</Frame>
+<img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/mcp-inspector.png" />
+
 
 The Inspector provides several features for interacting with your MCP server:
 
@@ -3847,9 +3801,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     
     Here's an example of what it should look like if connected to the weather server from the server quickstart:
     
-    <Frame>
+    
       <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/client-claude-cli-python.png" />
-    </Frame>
+    
     
     #### How It Works
     
@@ -5111,9 +5065,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     
     Here's an example of what it should look like it connected to a weather server quickstart:
     
-    <Frame>
+    
       <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-dotnet-client.png" />
-    </Frame>
+    
   </Tab>
 </Tabs>
 
@@ -5177,9 +5131,9 @@ This open source ecosystem of MCP servers means developers can leverage existing
 
 ## How does MCP work?
 
-<Frame>
+
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/mcp-simple-diagram.png" />
-</Frame>
+
 
 MCP creates a bridge between your AI applications and your data through a straightforward system:
 
