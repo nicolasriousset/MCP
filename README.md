@@ -9,6 +9,12 @@ No modifications have been made to the original content, except for formatting c
 The Model Context Protocol is an open standard that defines how AI models, clients, and servers can communicate in a structured and interoperable way.  
 All original content, concepts, and intellectual property belong to their respective authors and contributors.
 
+## Download eBooks
+
+| MCP Protocol revision | MarkDown                                   | ePub                                           | PDF                                          |
+| --------------------- | ------------------------------------------ | ---------------------------------------------- | -------------------------------------------- |
+| 2025-06-18            | [MCP r2025-06-18.md](rev2025-06-18/MCP.md) | [MCP r2025-06-18.epub](rev2025-06-18/MCP.epub) | [MCP r2025-06-18.pdf](rev2025-06-18/MCP.pdf) |
+
 ## Why this project exists
 
 - **Better reading experience** on Kindle, tablets, and e-readers  
