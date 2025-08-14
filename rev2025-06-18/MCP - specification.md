@@ -4034,3 +4034,8 @@ The following MCP operations support pagination:
 #### Error Handling
 
 Invalid cursors **SHOULD** result in an error with code -32602 (Invalid params).
+
+# Schema Reference
+
+Due to formatting issues, the Schema Reference is not included in this book.
+Check [https://modelcontextprotocol.io](https://modelcontextprotocol.io/specification/2025-06-18/schema)  for the complete reference.
