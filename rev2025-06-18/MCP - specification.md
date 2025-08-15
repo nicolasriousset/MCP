@@ -22,7 +22,7 @@ By using this eBook, you acknowledge that you do so at your own risk, and you ag
 
 # Specification
 
-<div id="enable-section-numbers" />
+
 
 [Model Context Protocol](https://modelcontextprotocol.io) (MCP) is an open protocol that enables seamless integration between LLM applications and external data sources and tools. Whether you're building an AI-powered IDE, enhancing a chat interface, or creating custom AI workflows, MCP provides a standardized way to connect LLMs with the context they need.
 
@@ -127,21 +127,14 @@ While MCP itself cannot enforce these security principles at the protocol level,
 
 Explore the detailed specification for each protocol component:
 
-<CardGroup cols={5}>
-  <Card title="Architecture" icon="sitemap" href="/specification/2025-06-18/architecture" />
-
-  <Card title="Base Protocol" icon="code" href="/specification/2025-06-18/basic" />
-
-  <Card title="Server Features" icon="server" href="/specification/2025-06-18/server" />
-
-  <Card title="Client Features" icon="user" href="/specification/2025-06-18/client" />
-
-  <Card title="Contributing" icon="pencil" href="/development/contributing" />
-</CardGroup>
+- [Architecture](#architecture)
+- [Base Protocol](#base-protocol)
+- [Server Features](#server-features)
+- [Client Features](#client-features)
 
 # Key Changes
 
-<div id="enable-section-numbers" />
+
 
 This document lists changes made to the Model Context Protocol (MCP) specification since the previous revision, [2025-03-26](/specification/2025-03-26).
 
@@ -179,8 +172,7 @@ This document lists changes made to the Model Context Protocol (MCP) specificati
 For a complete list of all changes that have been made since the last protocol revision, [see GitHub](https://github.com/modelcontextprotocol/specification/compare/2025-03-26...2025-06-18).
 
 # Architecture
-
-<div id="enable-section-numbers" />
+<div id="architecture" />
 
 The Model Context Protocol (MCP) follows a client-host-server architecture where each host can run multiple client instances. This architecture enables users to integrate AI capabilities across applications while maintaining clear security boundaries and isolating concerns. Built on JSON-RPC, MCP provides a stateful session protocol focused on context exchange and sampling coordination between clients and servers.
 
@@ -346,12 +338,13 @@ Each capability unlocks specific protocol features for use during the session. F
 This capability negotiation ensures clients and servers have a clear understanding of supported functionality while maintaining protocol extensibility.
 
 # Base Protocol
-
+<div id="base-protocol"/>
 ## Overview
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE]
+>  **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol consists of several key components that work together:
 
@@ -481,9 +474,10 @@ may reserve particular names for purpose-specific metadata, as declared in those
 
 ## Lifecycle
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE]
+>  **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) defines a rigorous lifecycle for client-server connections that ensures proper capability negotiation and state management.
 
@@ -704,9 +698,10 @@ Example initialization error:
 ```
 ## Transports
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE]
+>  **Protocol Revision**: 2025-06-18
 
 MCP uses JSON-RPC to encode messages. JSON-RPC messages **MUST** be UTF-8 encoded.
 
@@ -751,12 +746,8 @@ sequenceDiagram
 
 ### Streamable HTTP
 
-<Info>
-  This replaces the [HTTP+SSE
-  transport](/specification/2024-11-05/basic/transports#http-with-sse) from
-  protocol version 2024-11-05. See the [backwards compatibility](#backwards-compatibility)
-  guide below.
-</Info>
+> [!NOTE]
+> This replaces the [HTTP+SSE transport](/specification/2024-11-05/basic/transports#http-with-sse) from  protocol version 2024-11-05. See the [backwards compatibility](#backwards-compatibility)  guide below.
 
 In the **Streamable HTTP** transport, the server operates as an independent process that can handle multiple client connections. This transport uses HTTP POST and GET requests.
 Server can optionally make use of [Server-Sent Events](https://en.wikipedia.org/wiki/Server-sent_events) (SSE) to stream multiple server messages. This permits basic MCP servers, as well as more feature-rich servers supporting streaming and server-to-client notifications and requests.
@@ -977,9 +968,10 @@ Implementers who choose to support custom transports **MUST** ensure they preser
 
 ## Authorization
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE]
+>  **Protocol Revision**: 2025-06-18
 
 ### Introduction
 
@@ -1317,7 +1309,7 @@ to explicitly specify the target resource for which the token is being requested
 
 ## Security Best Practices
 
-<div id="enable-section-numbers" />
+
 
 ### Introduction
 
@@ -1545,9 +1537,10 @@ MCP servers can optionally leverage additional unique identifiers.
 
 #### Cancellation
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE]
+>  **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) supports optional cancellation of in-progress requests through notification messages. Either side can send a cancellation notification to indicate that a previously-issued request should be terminated.
 
@@ -1625,9 +1618,10 @@ This maintains the "fire and forget" nature of notifications while allowing for 
 
 #### Ping
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE]
+>  **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol includes an optional ping mechanism that allows either party to verify that their counterpart is still responsive and the connection is alive.
 
@@ -1690,9 +1684,10 @@ sequenceDiagram
 
 #### Progress
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) supports optional progress tracking for long-running operations through notification messages. Either side can send progress notifications to provide updates about operation status.
 
@@ -1779,12 +1774,13 @@ sequenceDiagram
 * Progress notifications **MUST** stop after completion
 
 # Client Features
-
+<div id="client-features"/>
 ## Roots
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) provides a standardized way for clients to expose filesystem "roots" to servers. Roots define the boundaries of where servers can operate within the filesystem, allowing them to understand which directories and files they have access to. Servers can request the list of roots from supporting clients and receive notifications when that list changes.
 
@@ -1963,9 +1959,10 @@ Example error:
 
 ## Sampling
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) provides a standardized way for servers to request LLM sampling ("completions" or "generations") from language models via clients. This flow allows clients to maintain control over model access, selection, and permissions while enabling servers to leverage AI capabilities—with no server API keys necessary.
 Servers can request text, audio, or image-based interactions and optionally include context from MCP servers in their prompts.
@@ -1976,16 +1973,12 @@ Sampling in MCP allows servers to implement agentic behaviors, by enabling LLM c
 
 Implementations are free to expose sampling through any interface pattern that suits their needs—the protocol itself does not mandate any specific user interaction model.
 
-<Warning>
-  For trust & safety and security, there **SHOULD** always
-  be a human in the loop with the ability to deny sampling requests.
-
-  Applications **SHOULD**:
-
-  * Provide UI that makes it easy and intuitive to review sampling requests
-  * Allow users to view and edit prompts before sending
-  * Present generated responses for review before delivery
-</Warning>
+> [!CAUTION]
+> For trust & safety and security, there **SHOULD** always be a human in the loop with the ability to deny sampling requests.
+> Applications **SHOULD**:
+> * Provide UI that makes it easy and intuitive to review sampling requests
+> * Allow users to view and edit prompts before sending
+> * Present generated responses for review before delivery
 
 ### Capabilities
 
@@ -2185,9 +2178,10 @@ Example error:
 
 ## Elicitation
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 <Note>
   Elicitation is newly introduced in this version of the MCP specification and its design may evolve in future protocol versions.
@@ -2202,17 +2196,17 @@ Elicitation in MCP allows servers to implement interactive workflows by enabling
 
 Implementations are free to expose elicitation through any interface pattern that suits their needs—the protocol itself does not mandate any specific user interaction model.
 
-<Warning>
-  For trust & safety and security:
+> [!CAUTION]
+> For trust & safety and security:
+>
+> * Servers **MUST NOT** use elicitation to request sensitive information.
+>
+> Applications **SHOULD**:
+>
+> * Provide UI that makes it clear which server is requesting information
+> * Allow users to review and modify their responses before sending
+> * Respect user privacy and provide clear decline and cancel options
 
-  * Servers **MUST NOT** use elicitation to request sensitive information.
-
-  Applications **SHOULD**:
-
-  * Provide UI that makes it clear which server is requesting information
-  * Allow users to review and modify their responses before sending
-  * Respect user privacy and provide clear decline and cancel options
-</Warning>
 
 ### Capabilities
 
@@ -2503,10 +2497,10 @@ Servers should handle each state appropriately:
 7. Clients **SHOULD** present elicitation requests in a way that makes it clear what information is being requested and why
 
 # Server features
-
+<div id="server-features"/>
 ## Overview
-
-<Info>**Protocol Revision**: 2025-06-18</Info>
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 Servers provide the fundamental building blocks for adding context to language models via MCP. These primitives enable rich interactions between clients, servers, and language models:
 
@@ -2525,20 +2519,17 @@ Each primitive can be summarized in the following control hierarchy:
 | Tools     | Model-controlled       | Functions exposed to the LLM to take actions       | API POST requests, file writing |
 
 Explore these key primitives in more detail below:
+* [Prompts](#prompts)
+* [Resources](#resources)
+* [Tools](#tools)
 
-<CardGroup cols={3}>
-  <Card title="Prompts" icon="message" href="/specification/2025-06-18/server/prompts" />
-
-  <Card title="Resources" icon="file-lines" href="/specification/2025-06-18/server/resources" />
-
-  <Card title="Tools" icon="wrench" href="/specification/2025-06-18/server/tools" />
-</CardGroup>
 
 ## Prompts
+<div id="prompts"/>
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) provides a standardized way for servers to expose prompt templates to clients. Prompts allow servers to provide structured messages and instructions for interacting with language models. Clients can discover available prompts, retrieve their contents, and provide arguments to customize them.
 
@@ -2800,10 +2791,11 @@ Servers **SHOULD** return standard JSON-RPC errors for common failure cases:
 Implementations **MUST** carefully validate all prompt inputs and outputs to prevent injection attacks or unauthorized access to resources.
 
 ## Resources
+<div id="resources"/>
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) provides a standardized way for servers to expose resources to clients. Resources allow servers to share data that provides context to language models, such as files, database schemas, or application-specific information.
 Each resource is uniquely identified by a [URI](https://datatracker.ietf.org/doc/html/rfc3986).
@@ -3180,10 +3172,11 @@ Example error:
 4. Resource permissions **SHOULD** be checked before operations
 
 ## Tools
+<div id="tools"/>
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) allows servers to expose tools that can be invoked by language models. Tools enable models to interact with external systems, such as querying databases, calling APIs, or performing computations. Each tool is uniquely identified by a name and includes metadata describing its schema.
 
@@ -3193,17 +3186,13 @@ Tools in MCP are designed to be **model-controlled**, meaning that the language 
 
 However, implementations are free to expose tools through any interface pattern that suits their needs—the protocol itself does not mandate any specific user interaction model.
 
-<Warning>
-  For trust & safety and security, there **SHOULD** always
-  be a human in the loop with the ability to deny tool invocations.
-
-  Applications **SHOULD**:
-
-  * Provide UI that makes clear which tools are being exposed to the AI model
-  * Insert clear visual indicators when tools are invoked
-  * Present confirmation prompts to the user for operations, to ensure a human is in the
-    loop
-    </Warning>
+> [!CAUTION]
+> For trust & safety and security, there **SHOULD** always be a human in the loop with the ability to deny tool invocations.
+> Applications **SHOULD**:
+>
+> * Provide UI that makes clear which tools are being exposed to the AI model
+> * Insert clear visual indicators when tools are invoked
+> * Present confirmation prompts to the user for operations, to ensure a human is in the loop
 
 ### Capabilities
 
@@ -3358,10 +3347,8 @@ A tool definition includes:
 * `outputSchema`: Optional JSON Schema defining expected output structure
 * `annotations`: optional properties describing tool behavior
 
-<Warning>
-  For trust & safety and security, clients **MUST** consider
-  tool annotations to be untrusted unless they come from trusted servers.
-</Warning>
+> [!CAUTION]
+> For trust & safety and security, clients **MUST** consider tool annotations to be untrusted unless they come from trusted servers.
 
 #### Tool Result
 
@@ -3609,9 +3596,10 @@ Example tool execution error:
 
 ### Completion
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) provides a standardized way for servers to offer argument autocompletion suggestions for prompts and resource URIs. This enables rich, IDE-like experiences where users receive contextual suggestions while entering argument values.
 
@@ -3805,9 +3793,10 @@ Implementations **MUST**:
 
 ### Logging
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) provides a standardized way for servers to send structured log messages to clients. Clients can control logging verbosity by setting minimum log levels, with servers sending notifications containing severity levels, optional logger names, and arbitrary JSON-serializable data.
 
@@ -3943,9 +3932,10 @@ Servers **SHOULD** return standard JSON-RPC errors for common failure cases:
 
 ### Pagination
 
-<div id="enable-section-numbers" />
 
-<Info>**Protocol Revision**: 2025-06-18</Info>
+
+> [!NOTE] 
+> **Protocol Revision**: 2025-06-18
 
 The Model Context Protocol (MCP) supports paginating list operations that may return large result sets. Pagination allows servers to yield results in smaller chunks rather than all at once.
 
