@@ -605,11 +605,10 @@ If the server supports the requested protocol version, it **MUST** respond with 
 If the client does not support the version in the server's response, it **SHOULD**
 disconnect.
 
-<Note>
-  If using HTTP, the client **MUST** include the `MCP-Protocol-Version: <protocol-version>` HTTP header on all subsequent requests to the MCP
-  server.
-  For details, see [the Protocol Version Header section in Transports](/specification/2025-06-18/basic/transports#protocol-version-header).
-</Note>
+> [!NOTE]
+> If using HTTP, the client **MUST** include the `MCP-Protocol-Version: <protocol-version>` HTTP header on all subsequent requests to the MCP server.
+>  For details, see [the Protocol Version Header section in Transports](/specification/2025-06-18/basic/transports#protocol-version-header).
+
 
 ##### Capability Negotiation
 
@@ -2183,9 +2182,9 @@ Example error:
 > [!NOTE] 
 > **Protocol Revision**: 2025-06-18
 
-<Note>
-  Elicitation is newly introduced in this version of the MCP specification and its design may evolve in future protocol versions.
-</Note>
+> [!NOTE]
+> Elicitation is newly introduced in this version of the MCP specification and its design may evolve in future protocol versions.
+
 
 The Model Context Protocol (MCP) provides a standardized way for servers to request additional information from users through the client during interactions. This flow allows clients to maintain control over user interactions and data sharing while enabling servers to gather necessary information dynamically.
 Servers request structured data from users with JSON schemas to validate responses.
@@ -2700,11 +2699,8 @@ Messages in a prompt can contain:
 * `role`: Either "user" or "assistant" to indicate the speaker
 * `content`: One of the following content types:
 
-<Note>
-  All content types in prompt messages support optional
-  [annotations](/specification/2025-06-18/server/resources#annotations) for
-  metadata about audience, priority, and modification times.
-</Note>
+> [!NOTE]
+> All content types in prompt messages support optional [annotations](/specification/2025-06-18/server/resources#annotations) for metadata about audience, priority, and modification times.
 
 ##### Text Content
 
@@ -3356,13 +3352,8 @@ Tool results may contain [**structured**](#structured-content) or **unstructured
 
 **Unstructured** content is returned in the `content` field of a result, and can contain multiple content items of different types:
 
-<Note>
-  All content types (text, image, audio, resource links, and embedded resources)
-  support optional
-  [annotations](/specification/2025-06-18/server/resources#annotations) that
-  provide metadata about audience, priority, and modification times. This is the
-  same annotation format used by resources and prompts.
-</Note>
+> [!NOTE]
+> All content types (text, image, audio, resource links, and embedded resources) support optional [annotations](/specification/2025-06-18/server/resources#annotations) that provide metadata about audience, priority, and modification times. This is the same annotation format used by resources and prompts.
 
 ##### Text Content
 
@@ -3420,10 +3411,8 @@ A tool **MAY** return links to [Resources](/specification/2025-06-18/server/reso
 
 Resource links support the same [Resource annotations](/specification/2025-06-18/server/resources#annotations) as regular resources to help clients understand how to use them.
 
-<Info>
-  Resource links returned by tools are not guaranteed to appear in the results
-  of a `resources/list` request.
-</Info>
+> [!NOTE] 
+> Resource links returned by tools are not guaranteed to appear in the results of a `resources/list` request.
 
 ##### Embedded Resources
 
