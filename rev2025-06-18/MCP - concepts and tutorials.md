@@ -43,7 +43,7 @@ Your AI-powered application can now access real data, execute actions, and provi
 
 # Introduction
 
-> Get started with the Model Context Protocol (MCP)
+## Get started with the Model Context Protocol (MCP)
 
 MCP is an open protocol that standardizes how applications provide context to large language models (LLMs). Think of MCP like a USB-C port for AI applications. Just as USB-C provides a standardized way to connect your devices to various peripherals and accessories, MCP provides a standardized way to connect AI models to different data sources and tools. MCP enables you to build agents and complex workflows on top of LLMs and connects your models with the world.
 
@@ -56,27 +56,10 @@ MCP provides:
 
 ## Choose Your Path
 
-<CardGroup cols={2}>
-  <Card title="Understand Concepts" icon="book" href="/docs/learn/architecture">
-    Learn the core concepts and architecture of MCP
-  </Card>
-
-  {" "}
-
-  <Card title="Use MCP" icon="plug" href="/docs/tutorials/use-remote-mcp-server">
-    Connect to existing MCP servers and start using them
-  </Card>
-
-  {" "}
-
-  <Card title="Build Servers" icon="server" href="/quickstart/server">
-    Create MCP servers to expose your data and tools
-  </Card>
-
-  <Card title="Build Clients" icon="computer" href="/quickstart/client">
-    Develop applications that connect to MCP servers
-  </Card>
-</CardGroup>
+* [**Understand Concepts**](#architecture): Learn the core concepts and architecture of MCP
+* [**Use MCP**](#using-mcp): Connect to existing MCP servers and start using them
+* [**Build Servers**](#build-servers): Create MCP servers to expose your data and tools
+* [**Build Clients**](#build-clients): Develop applications that connect to MCP servers
 
 ## Ready to Build?
 
@@ -90,25 +73,15 @@ Build MCP servers and clients using our official SDKs. Choose the SDK that match
 
 ## Available SDKs
 
-<CardGroup cols={3}>
-  <Card title="TypeScript" icon="square-js" href="https://github.com/modelcontextprotocol/typescript-sdk" />
-
-  <Card title="Python" icon="python" href="https://github.com/modelcontextprotocol/python-sdk" />
-
-  <Card title="Go" icon="golang" href="https://github.com/modelcontextprotocol/go-sdk" />
-
-  <Card title="Kotlin" icon="square-k" href="https://github.com/modelcontextprotocol/kotlin-sdk" />
-
-  <Card title="Swift" icon="swift" href="https://github.com/modelcontextprotocol/swift-sdk" />
-
-  <Card title="Java" icon="java" href="https://github.com/modelcontextprotocol/java-sdk" />
-
-  <Card title="C#" icon="square-c" href="https://github.com/modelcontextprotocol/csharp-sdk" />
-
-  <Card title="Ruby" icon="gem" href="https://github.com/modelcontextprotocol/ruby-sdk" />
-
-  <Card title="Rust" icon="rust" href="https://github.com/modelcontextprotocol/rust-sdk" />
-</CardGroup>
+* [TypeScript](https://github.com/modelcontextprotocol/typescript-sdk)
+* [Python](https://github.com/modelcontextprotocol/python-sdk)
+* [Go](https://github.com/modelcontextprotocol/go-sdk)
+* [Kotlin](https://github.com/modelcontextprotocol/kotlin-sdk)
+* [Swift](https://github.com/modelcontextprotocol/swift-sdk)
+* [Java](https://github.com/modelcontextprotocol/java-sdk)
+* [C#](https://github.com/modelcontextprotocol/csharp-sdk)
+* [Ruby](https://github.com/modelcontextprotocol/ruby-sdk)
+* [Rust](https://github.com/modelcontextprotocol/rust-sdk)
 
 ## Getting Started
 
@@ -125,27 +98,16 @@ Visit the SDK page for your chosen language to find installation instructions, d
 
 Ready to start building with MCP? Choose your path:
 
-<CardGroup cols={2}>
-  <Card title="Build a Server" icon="server" href="/quickstart/server">
-    Learn how to create your first MCP server
-  </Card>
+* [**Build a Server**](#build-servers): Learn how to create your first MCP server
+* [**Build a Client**](#build-clients): Create applications that connect to MCP servers
+* **Explore Examples**: Browse pre-built servers for inspiration
+* [**Understand the Architecture**](#architecture): Dive deeper into how MCP works
 
-  <Card title="Build a Client" icon="computer" href="/quickstart/client">
-    Create applications that connect to MCP servers
-  </Card>
-
-  <Card title="Explore Examples" icon="code" href="https://github.com/modelcontextprotocol/servers">
-    Browse pre-built servers for inspiration
-  </Card>
-
-  <Card title="Understand the Architecture" icon="book" href="/docs/learn/architecture">
-    Dive deeper into how MCP works
-  </Card>
-</CardGroup>
 
 # Concepts
 
 ## Architecture Overview
+<div id="architecture"/>
 
 This overview of the Model Context Protocol (MCP) discusses its [scope](#scope) and [core concepts](#concepts-of-mcp), and provides an [example](#example) demonstrating each core concept.
 
@@ -162,10 +124,8 @@ The Model Context Protocol includes the following projects:
 * **MCP Development Tools**: Tools for developing MCP servers and clients, including the [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
 * [MCP Reference Server Implementations](https://github.com/modelcontextprotocol/servers): Reference implementations of MCP servers.
 
-<Note>
-  MCP focuses solely on the protocol for context exchange—it does not dictate
-  how AI applications use LLMs or manage the provided context.
-</Note>
+> [!NOTE]
+> MCP focuses solely on the protocol for context exchange—it does not dictate how AI applications use LLMs or manage the provided context.
 
 ### Concepts of MCP
 
@@ -287,7 +247,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
 ##### Initialization (Lifecycle Management)
 MCP begins with lifecycle management through a capability negotiation handshake. As described in the [lifecycle management](#lifecycle-management) section, the client sends an `initialize` request to establish the connection and negotiate supported features.
 
-<CodeGroup>
+
   ```json Request
   {
 	"jsonrpc": "2.0",
@@ -325,7 +285,7 @@ MCP begins with lifecycle management through a capability negotiation handshake.
 	}
   }
   ```
-</CodeGroup>
+
 
 ###### Understanding the Initialization Exchange
 
@@ -374,7 +334,7 @@ async with stdio_client(server_config) as (read, write):
 ##### Tool Discovery (Primitives)
 Now that the connection is established, the client can discover available tools by sending a `tools/list` request. This request is fundamental to MCP's tool discovery mechanism — it allows clients to understand what tools are available on the server before attempting to use them.
 
-<CodeGroup>
+
   ```json Request
   {
 	"jsonrpc": "2.0",
@@ -429,7 +389,7 @@ Now that the connection is established, the client can discover available tools 
 	}
   }
   ```
-</CodeGroup>
+
 
 ###### Understanding the Tool Discovery Request
 
@@ -466,7 +426,7 @@ The client can now execute a tool using the `tools/call` method. This demonstrat
 
 The `tools/call` request follows a structured format that ensures type safety and clear communication between client and server. Note that we're using the proper tool name from the discovery response (`weather_current`) rather than a simplified name:
 
-<CodeGroup>
+
   ```json Request
   {
 	"jsonrpc": "2.0",
@@ -496,7 +456,7 @@ The `tools/call` request follows a structured format that ensures type safety an
 	}
   }
   ```
-</CodeGroup>
+
 
 ###### Key Elements of Tool Execution
 
@@ -1061,11 +1021,8 @@ Elicitation interactions are designed to be clear, contextual, and respectful of
 The Model Context Protocol uses string-based version identifiers following the format
 `YYYY-MM-DD`, to indicate the last date backwards incompatible changes were made.
 
-<Info>
-  The protocol version will *not* be incremented when the
-  protocol is updated, as long as the changes maintain backwards compatibility. This allows
-  for incremental improvements while preserving interoperability.
-</Info>
+> [!NOTE]
+> The protocol version will *not* be incremented when the protocol is updated, as long as the changes maintain backwards compatibility. This allows for incremental improvements while preserving interoperability.
 
 ### Revisions
 
@@ -1088,7 +1045,7 @@ The protocol provides appropriate error handling if version negotiation fails, a
 # Tutorials
 
 ## Using MCP
-
+<div id="using-mcp"/>
 ### Connect to Remote MCP Servers
 
 > Learn how to connect Claude to remote MCP servers and extend its capabilities with internet-hosted tools and data sources
@@ -1265,7 +1222,7 @@ This action creates a new configuration file if one doesn't exist, or opens your
 ##### Configure the Filesystem Server
 Replace the contents of the configuration file with the following JSON structure. This configuration tells Claude Desktop to start the Filesystem Server with access to specific directories:
 
-<CodeGroup>
+
   ```json macOS
   {
 	"mcpServers": {
@@ -1297,25 +1254,23 @@ Replace the contents of the configuration file with the following JSON structure
 	}
   }
   ```
-</CodeGroup>
+
 
 Replace `username` with your actual computer username. The paths listed in the `args` array specify which directories the Filesystem Server can access. You can modify these paths or add additional directories as needed.
 
-<Tip>
-  **Understanding the Configuration**
+> [!TIP]
+> **Understanding the Configuration**
+>
+> * `"filesystem"`: A friendly name for the server that appears in Claude Desktop
+> * `"command": "npx"`: Uses Node.js's npx tool to run the server
+> * `"-y"`: Automatically confirms the installation of the server package
+> * `"@modelcontextprotocol/server-filesystem"`: The package name of the Filesystem Server
+> * The remaining arguments: Directories the server is allowed to access
 
-  * `"filesystem"`: A friendly name for the server that appears in Claude Desktop
-  * `"command": "npx"`: Uses Node.js's npx tool to run the server
-  * `"-y"`: Automatically confirms the installation of the server package
-  * `"@modelcontextprotocol/server-filesystem"`: The package name of the Filesystem Server
-  * The remaining arguments: Directories the server is allowed to access
-</Tip>
-
-<Warning>
-  **Security Consideration**
-
-  Only grant access to directories you're comfortable with Claude reading and modifying. The server runs with your user account permissions, so it can perform any file operations you can perform manually.
-</Warning>
+> [!CAUTION]
+> **Security Consideration**
+>
+>  Only grant access to directories you're comfortable with Claude reading and modifying. The server runs with your user account permissions, so it can perform any file operations you can perform manually.
 
 ##### Restart Claude Desktop
 After saving the configuration file, completely quit Claude Desktop and restart it. The application needs to restart to load the new configuration and start the MCP server.
@@ -1355,90 +1310,80 @@ Review each request carefully before approving. You can always deny a request if
 
 If you encounter issues setting up or using the Filesystem Server, these solutions address common problems:
 
-<AccordionGroup>
-  <Accordion title="Server not showing up in Claude / hammer icon missing">
-    1. Restart Claude Desktop completely
-    2. Check your `claude_desktop_config.json` file syntax
-    3. Make sure the file paths included in `claude_desktop_config.json` are valid and that they are absolute and not relative
-    4. Look at [logs](#getting-logs-from-claude-for-desktop) to see why the server is not connecting
-    5. In your command line, try manually running the server (replacing `username` as you did in `claude_desktop_config.json`) to see if you get any errors:
+##### Server not showing up in Claude / hammer icon missing
+1. Restart Claude Desktop completely
+2. Check your `claude_desktop_config.json` file syntax
+3. Make sure the file paths included in `claude_desktop_config.json` are valid and that they are absolute and not relative
+4. Look at [logs](#getting-logs-from-claude-for-desktop) to see why the server is not connecting
+5. In your command line, try manually running the server (replacing `username` as you did in `claude_desktop_config.json`) to see if you get any errors:
 
-    <CodeGroup>
-      ```bash macOS/Linux
-      npx -y @modelcontextprotocol/server-filesystem /Users/username/Desktop /Users/username/Downloads
-      ```
     
-      ```powershell Windows
-      npx -y @modelcontextprotocol/server-filesystem C:\Users\username\Desktop C:\Users\username\Downloads
-      ```
-    </CodeGroup>
-  </Accordion>
+```bash macOS/Linux
+npx -y @modelcontextprotocol/server-filesystem /Users/username/Desktop /Users/username/Downloads
+```
 
-  <Accordion title="Getting logs from Claude Desktop">
-    Claude.app logging related to MCP is written to log files in:
+```powershell Windows
+npx -y @modelcontextprotocol/server-filesystem C:\Users\username\Desktop C:\Users\username\Downloads
+```
+    
+##### Getting logs from Claude Desktop
 
-    * macOS: `~/Library/Logs/Claude`
-    
-    * Windows: `%APPDATA%\Claude\logs`
-    
-    * `mcp.log` will contain general logging about MCP connections and connection failures.
-    
-    * Files named `mcp-server-SERVERNAME.log` will contain error (stderr) logging from the named server.
-    
-    You can run the following command to list recent logs and follow along with any new ones (on Windows, it will only show recent logs):
-    
-    <CodeGroup>
-      ```bash macOS/Linux
-      tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
-      ```
-    
-      ```powershell Windows
-      type "%APPDATA%\Claude\logs\mcp*.log"
-      ```
-    </CodeGroup>
-  </Accordion>
+Claude.app logging related to MCP is written to log files in:
 
-  <Accordion title="Tool calls failing silently">
-    If Claude attempts to use the tools but they fail:
+* macOS: `~/Library/Logs/Claude`
+* Windows: `%APPDATA%\Claude\logs`
+* `mcp.log` will contain general logging about MCP connections and connection failures.
+* Files named `mcp-server-SERVERNAME.log` will contain error (stderr) logging from the named server.
 
-    1. Check Claude's logs for errors
-    2. Verify your server builds and runs without errors
-    3. Try restarting Claude Desktop
-  </Accordion>
+You can run the following command to list recent logs and follow along with any new ones (on Windows, it will only show recent logs):
 
-  <Accordion title="None of this is working. What do I do?">
-    Please refer to our [debugging guide](/legacy/tools/debugging) for better debugging tools and more detailed guidance.
-  </Accordion>
 
-  <Accordion title="ENOENT error and `${APPDATA}` in paths on Windows">
-    If your configured server fails to load, and you see within its logs an error referring to `${APPDATA}` within a path, you may need to add the expanded value of `%APPDATA%` to your `env` key in `claude_desktop_config.json`:
+  ```bash macOS/Linux
+  tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
+  ```
 
-    ```json
-    {
-      "brave-search": {
-        "command": "npx",
-        "args": ["-y", "@modelcontextprotocol/server-brave-search"],
-        "env": {
-          "APPDATA": "C:\\Users\\user\\AppData\\Roaming\\",
-          "BRAVE_API_KEY": "..."
-        }
-      }
-    }
-    ```
+  ```powershell Windows
+  type "%APPDATA%\Claude\logs\mcp*.log"
+  ```
     
-    With this change in place, launch Claude Desktop once again.
+##### Tool calls failing silently
+
+If Claude attempts to use the tools but they fail:
+
+1. Check Claude's logs for errors
+2. Verify your server builds and runs without errors
+3. Try restarting Claude Desktop
+
+##### None of this is working. What do I do?
+Please refer to our [debugging guide](/legacy/tools/debugging) for better debugging tools and more detailed guidance.
+
+##### ENOENT error and `${APPDATA}` in paths on Windows
+If your configured server fails to load, and you see within its logs an error referring to `${APPDATA}` within a path, you may need to add the expanded value of `%APPDATA%` to your `env` key in `claude_desktop_config.json`:
+
+```json
+{
+  "brave-search": {
+	"command": "npx",
+	"args": ["-y", "@modelcontextprotocol/server-brave-search"],
+	"env": {
+	  "APPDATA": "C:\\Users\\user\\AppData\\Roaming\\",
+	  "BRAVE_API_KEY": "..."
+	}
+  }
+}
+```
+
+With this change in place, launch Claude Desktop once again.
     
-    <Warning>
-      **NPM should be installed globally**
-    
-      The `npx` command may continue to fail if you have not installed NPM globally. If NPM is already installed globally, you will find `%APPDATA%\npm` exists on your system. If not, you can install NPM globally by running the following command:
-    
-      ```bash
-      npm install -g npm
-      ```
-    </Warning>
-  </Accordion>
-</AccordionGroup>
+> [!CAUTION]
+> **NPM should be installed globally**
+>    
+>      The `npx` command may continue to fail if you have not installed NPM globally. If NPM is already installed globally, you will find `%APPDATA%\npm` exists on your system. If not, you can install NPM globally by running the following command:
+>    
+>      ```bash
+>      npm install -g npm
+>      ```
+
 
 #### Next Steps
 
@@ -1466,7 +1411,7 @@ Now that you've successfully connected Claude Desktop to a local MCP server, exp
 </CardGroup>
 
 ## Server Development
-
+<div id="build-servers"/>
 ### Build an MCP Server
 
 > Get started building your own server to use in Claude for Desktop and other clients.
@@ -1487,9 +1432,8 @@ We'll build a server that exposes two tools: `get_alerts` and `get_forecast`. Th
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/current-weather.png" />
 
 
-<Note>
-  Servers can connect to any client. We've chosen Claude for Desktop here for simplicity, but we also have guides on [building your own client](/quickstart/client) as well as a [list of other clients here](/clients).
-</Note>
+> [!NOTE]
+> Servers can connect to any client. We've chosen Claude for Desktop here for simplicity, but we also have guides on [building your own client](/quickstart/client) as well as a [list of other clients here](/clients).
 
 ##### Core MCP Concepts
 
@@ -1551,7 +1495,7 @@ This tutorial will primarily focus on tools.
     
     First, let's install `uv` and set up our Python project and environment:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       curl -LsSf https://astral.sh/uv/install.sh | sh
       ```
@@ -1559,13 +1503,13 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
       ```
-    </CodeGroup>
+    
     
     Make sure to restart your terminal afterwards to ensure that the `uv` command gets picked up.
     
     Now, let's create and set up our project:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       # Create a new directory for our project
       uv init weather
@@ -1597,7 +1541,7 @@ This tutorial will primarily focus on tools.
       # Create our server file
       new-item weather.py
       ```
-    </CodeGroup>
+    
     
     Now let's dive into building your server.
     
@@ -1730,9 +1674,8 @@ This tutorial will primarily focus on tools.
     
     #### Testing your server with Claude for Desktop
     
-    <Note>
-      Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
-    </Note>
+> [!NOTE]
+> Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
     
     First, make sure you have Claude for Desktop installed. [You can install the latest version
     here.](https://claude.ai/download) If you already have Claude for Desktop, **make sure it's updated to the latest version.**
@@ -1741,7 +1684,7 @@ This tutorial will primarily focus on tools.
     
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
@@ -1749,13 +1692,13 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       code $env:AppData\Claude\claude_desktop_config.json
       ```
-    </CodeGroup>
+    
     
     You'll then add your servers in the `mcpServers` key. The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
     
     In this case, we'll add our single weather server like so:
     
-    <CodeGroup>
+    
       ```json macOS/Linux
       {
         "mcpServers": {
@@ -1787,15 +1730,13 @@ This tutorial will primarily focus on tools.
         }
       }
       ```
-    </CodeGroup>
     
-    <Warning>
-      You may need to put the full path to the `uv` executable in the `command` field. You can get this by running `which uv` on macOS/Linux or `where uv` on Windows.
-    </Warning>
     
-    <Note>
-      Make sure you pass in the absolute path to your server. You can get this by running `pwd` on macOS/Linux or `cd` on Windows Command Prompt. On Windows, remember to use double backslashes (`\\`) or forward slashes (`/`) in the JSON path.
-    </Note>
+> [!CAUTION]
+> You may need to put the full path to the `uv` executable in the `command` field. You can get this by running `which uv` on macOS/Linux or `where uv` on Windows.
+    
+> [!NOTE]
+> Make sure you pass in the absolute path to your server. You can get this by running `pwd` on macOS/Linux or `cd` on Windows Command Prompt. On Windows, remember to use double backslashes (`\\`) or forward slashes (`/`) in the JSON path.
     
     This tells Claude for Desktop:
     
@@ -1863,7 +1804,7 @@ This tutorial will primarily focus on tools.
     
     Now, let's create and set up our project:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       # Create a new directory for our project
       mkdir weather
@@ -1897,7 +1838,7 @@ This tutorial will primarily focus on tools.
       md src
       new-item src\index.ts
       ```
-    </CodeGroup>
+    
     
     Update your package.json to add type: "module" and a build script:
     
@@ -2200,9 +2141,8 @@ This tutorial will primarily focus on tools.
     
     #### Testing your server with Claude for Desktop
     
-    <Note>
-      Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
-    </Note>
+> [!NOTE]
+> Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
     
     First, make sure you have Claude for Desktop installed. [You can install the latest version
     here.](https://claude.ai/download) If you already have Claude for Desktop, **make sure it's updated to the latest version.**
@@ -2211,7 +2151,7 @@ This tutorial will primarily focus on tools.
     
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
@@ -2219,13 +2159,13 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       code $env:AppData\Claude\claude_desktop_config.json
       ```
-    </CodeGroup>
+    
     
     You'll then add your servers in the `mcpServers` key. The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
     
     In this case, we'll add our single weather server like so:
     
-    <CodeGroup>
+    
       ```json macOS/Linux
       {
         "mcpServers": {
@@ -2247,7 +2187,7 @@ This tutorial will primarily focus on tools.
         }
       }
       ```
-    </CodeGroup>
+    
     
     This tells Claude for Desktop:
     
@@ -2258,10 +2198,9 @@ This tutorial will primarily focus on tools.
   </Tab>
 
   <Tab title="Java">
-    <Note>
-      This is a quickstart demo based on Spring AI MCP auto-configuration and boot starters.
-      To learn how to create sync and async MCP Servers, manually, consult the [Java SDK Server](/sdk/java/mcp-server) documentation.
-    </Note>
+> [!NOTE]
+> This is a quickstart demo based on Spring AI MCP auto-configuration and boot starters.
+> To learn how to create sync and async MCP Servers, manually, consult the [Java SDK Server](/sdk/java/mcp-server) documentation.
 
     Let's get started with building our weather server!
     [You can find the complete code for what we'll be building here.](https://github.com/spring-projects/spring-ai-examples/tree/main/model-context-protocol/weather/starter-stdio-server)
@@ -2300,7 +2239,7 @@ This tutorial will primarily focus on tools.
     
     You will need to add the following dependencies:
     
-    <CodeGroup>
+    
       ```xml Maven
       <dependencies>
             <dependency>
@@ -2321,11 +2260,11 @@ This tutorial will primarily focus on tools.
         implementation platform("org.springframework:spring-web")
       }
       ```
-    </CodeGroup>
+    
     
     Then configure your application by setting the application properties:
     
-    <CodeGroup>
+    
       ```bash application.properties
       spring.main.bannerMode=off
       logging.pattern.console=
@@ -2339,7 +2278,7 @@ This tutorial will primarily focus on tools.
         main:
           banner-mode: off
       ```
-    </CodeGroup>
+    
     
     The [Server Configuration Properties](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-starter-docs.html#_configuration_properties) documents all available properties.
     
@@ -2430,9 +2369,8 @@ This tutorial will primarily focus on tools.
     
     #### Testing your server with Claude for Desktop
     
-    <Note>
-      Claude for Desktop is not yet available on Linux.
-    </Note>
+> [!NOTE]
+> Claude for Desktop is not yet available on Linux.
     
     First, make sure you have Claude for Desktop installed.
     [You can install the latest version here.](https://claude.ai/download) If you already have Claude for Desktop, **make sure it's updated to the latest version.**
@@ -2443,7 +2381,7 @@ This tutorial will primarily focus on tools.
     
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
@@ -2451,14 +2389,14 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       code $env:AppData\Claude\claude_desktop_config.json
       ```
-    </CodeGroup>
+    
     
     You'll then add your servers in the `mcpServers` key.
     The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
     
     In this case, we'll add our single weather server like so:
     
-    <CodeGroup>
+    
       ```json macOS/Linux
       {
         "mcpServers": {
@@ -2488,11 +2426,10 @@ This tutorial will primarily focus on tools.
         }
       }
       ```
-    </CodeGroup>
     
-    <Note>
-      Make sure you pass in the absolute path to your server.
-    </Note>
+    
+> [!NOTE]
+> Make sure you pass in the absolute path to your server.
     
     This tells Claude for Desktop:
     
@@ -2584,7 +2521,7 @@ This tutorial will primarily focus on tools.
     
     Now, let's create and set up your project:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       # Create a new directory for our project
       mkdir weather
@@ -2602,7 +2539,7 @@ This tutorial will primarily focus on tools.
       # Initialize a new kotlin project
       gradle init
       ```
-    </CodeGroup>
+    
     
     After running `gradle init`, you will be presented with options for creating your project.
     Select **Application** as the project type, **Kotlin** as the programming language, and **Java 17** as the Java version.
@@ -2611,7 +2548,7 @@ This tutorial will primarily focus on tools.
     
     After creating the project, add the following dependencies:
     
-    <CodeGroup>
+    
       ```kotlin build.gradle.kts
       val mcpVersion = "0.4.0"
       val slf4jVersion = "2.0.9"
@@ -2637,11 +2574,11 @@ This tutorial will primarily focus on tools.
           implementation "io.ktor:ktor-serialization-kotlinx-json:$ktorVersion"
       }
       ```
-    </CodeGroup>
+    
     
     Also, add the following plugins to your build script:
     
-    <CodeGroup>
+    
       ```kotlin build.gradle.kts
       plugins {
           kotlin("plugin.serialization") version "your_version_of_kotlin"
@@ -2655,7 +2592,7 @@ This tutorial will primarily focus on tools.
           id 'com.github.johnrengelman.shadow' version '8.1.1'
       }
       ```
-    </CodeGroup>
+    
     
     Now let’s dive into building your server.
     
@@ -2860,9 +2797,8 @@ This tutorial will primarily focus on tools.
     
     #### Testing your server with Claude for Desktop
     
-    <Note>
-      Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
-    </Note>
+> [!NOTE]
+> Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
     
     First, make sure you have Claude for Desktop installed. [You can install the latest version
     here.](https://claude.ai/download) If you already have Claude for Desktop, **make sure it's updated to the latest version.**
@@ -2873,7 +2809,7 @@ This tutorial will primarily focus on tools.
     
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
@@ -2881,14 +2817,14 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       code $env:AppData\Claude\claude_desktop_config.json
       ```
-    </CodeGroup>
+    
     
     You'll then add your servers in the `mcpServers` key.
     The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
     
     In this case, we'll add our single weather server like so:
     
-    <CodeGroup>
+    
       ```json macOS/Linux
       {
         "mcpServers": {
@@ -2916,7 +2852,7 @@ This tutorial will primarily focus on tools.
         }
       }
       ```
-    </CodeGroup>
+    
     
     This tells Claude for Desktop:
     
@@ -2970,7 +2906,7 @@ This tutorial will primarily focus on tools.
     
     Now, let's create and set up your project:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       # Create a new directory for our project
       mkdir weather
@@ -2986,7 +2922,7 @@ This tutorial will primarily focus on tools.
       # Initialize a new C# project
       dotnet new console
       ```
-    </CodeGroup>
+    
     
     After running `dotnet new console`, you will be presented with a new C# project.
     You can open the project in your favorite IDE, such as [Visual Studio](https://visualstudio.microsoft.com/) or [Rider](https://www.jetbrains.com/rider/).
@@ -3030,9 +2966,8 @@ This tutorial will primarily focus on tools.
     await app.RunAsync();
     ```
     
-    <Note>
-      When creating the `ApplicationHostBuilder`, ensure you use `CreateEmptyApplicationBuilder` instead of `CreateDefaultBuilder`. This ensures that the server does not write any additional messages to the console. This is only necessary for servers using STDIO transport.
-    </Note>
+> [!NOTE]
+> When creating the `ApplicationHostBuilder`, ensure you use `CreateEmptyApplicationBuilder` instead of `CreateDefaultBuilder`. This ensures that the server does not write any additional messages to the console. This is only necessary for servers using STDIO transport.
     
     This code sets up a basic console application that uses the Model Context Protocol SDK to create an MCP server with standard I/O transport.
     
@@ -3130,16 +3065,15 @@ This tutorial will primarily focus on tools.
     
     #### Testing your server with Claude for Desktop
     
-    <Note>
-      Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
-    </Note>
+> [!NOTE]
+> Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
     
     First, make sure you have Claude for Desktop installed. [You can install the latest version
     here.](https://claude.ai/download) If you already have Claude for Desktop, **make sure it's updated to the latest version.**
     We'll need to configure Claude for Desktop for whichever MCP servers you want to use. To do this, open your Claude for Desktop App configuration at `~/Library/Application Support/Claude/claude_desktop_config.json` in a text editor. Make sure to create the file if it doesn't exist.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
@@ -3147,12 +3081,12 @@ This tutorial will primarily focus on tools.
       ```powershell Windows
       code $env:AppData\Claude\claude_desktop_config.json
       ```
-    </CodeGroup>
+    
     
     You'll then add your servers in the `mcpServers` key. The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
     In this case, we'll add our single weather server like so:
     
-    <CodeGroup>
+    
       ```json macOS/Linux
       {
         "mcpServers": {
@@ -3179,7 +3113,7 @@ This tutorial will primarily focus on tools.
         }
       }
       ```
-    </CodeGroup>
+    
     
     This tells Claude for Desktop:
     
@@ -3218,9 +3152,8 @@ If the tool settings icon has shown up, you can now test your server by running 
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/weather-alerts.png" />
 
 
-<Note>
-  Since this is the US National Weather service, the queries will only work for US locations.
-</Note>
+> [!NOTE]
+> Since this is the US National Weather service, the queries will only work for US locations.
 
 #### What's happening under the hood
 
@@ -3235,8 +3168,7 @@ When you ask a question:
 
 #### Troubleshooting
 
-<AccordionGroup>
-  <Accordion title="Claude for Desktop Integration Issues">
+##### Claude for Desktop Integration Issues
     **Getting logs from Claude for Desktop**
 
     Claude.app logging related to MCP is written to log files in `~/Library/Logs/Claude`:
@@ -3268,9 +3200,8 @@ When you ask a question:
     **None of this is working. What do I do?**
     
     Please refer to our [debugging guide](/legacy/tools/debugging) for better debugging tools and more detailed guidance.
-  </Accordion>
 
-  <Accordion title="Weather API Issues">
+##### Weather API Issues
     **Error: Failed to retrieve grid point data**
 
     This usually means either:
@@ -3288,12 +3219,9 @@ When you ask a question:
     **Error: No active alerts for \[STATE]**
     
     This isn't an error - it just means there are no current weather alerts for that state. Try a different state or check during severe weather.
-  </Accordion>
-</AccordionGroup>
 
-<Note>
-  For more advanced troubleshooting, check out our guide on [Debugging MCP](/legacy/tools/debugging)
-</Note>
+> [!NOTE]
+> For more advanced troubleshooting, check out our guide on [Debugging MCP](/legacy/tools/debugging)
 
 #### Next steps
 
@@ -3457,7 +3385,7 @@ The Inspector provides several features for interacting with your MCP server:
 </CardGroup>
 
 ## Client Development
-
+<div id="build-clients"/>
 ### Build an MCP Client
 
 > Get started building your own client that can integrate with all MCP servers.
@@ -3530,9 +3458,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     echo ".env" >> .gitignore
     ```
     
-    <Warning>
-      Make sure you keep your `ANTHROPIC_API_KEY` secure!
-    </Warning>
+> [!CAUTION]
+> Make sure you keep your `ANTHROPIC_API_KEY` secure!
     
     #### Creating the Client
     
@@ -3786,9 +3713,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     uv run client.py path/to/build/index.js # node server
     ```
     
-    <Note>
-      If you're continuing the weather tutorial from the server quickstart, your command might look something like this: `python client.py .../quickstart-resources/weather-server-python/weather.py`
-    </Note>
+> [!NOTE]
+> If you're continuing the weather tutorial from the server quickstart, your command might look something like this: `python client.py .../quickstart-resources/weather-server-python/weather.py`
     
     The client will:
     
@@ -3895,7 +3821,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     
     First, let's create and set up our project:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       # Create project directory
       mkdir mcp-client-typescript
@@ -3931,7 +3857,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
       # Create source file
       new-item index.ts
       ```
-    </CodeGroup>
+    
     
     Update your `package.json` to set `type: "module"` and a build script:
     
@@ -3980,9 +3906,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     echo ".env" >> .gitignore
     ```
     
-    <Warning>
-      Make sure you keep your `ANTHROPIC_API_KEY` secure!
-    </Warning>
+> [!CAUTION]
+> Make sure you keep your `ANTHROPIC_API_KEY` secure!
     
     #### Creating the Client
     
@@ -4194,9 +4119,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     node build/index.js path/to/build/index.js # node server
     ```
     
-    <Note>
-      If you're continuing the weather tutorial from the server quickstart, your command might look something like this: `node build/index.js .../quickstart-resources/weather-server-typescript/build/index.js`
-    </Note>
+> [!NOTE]
+> If you're continuing the weather tutorial from the server quickstart, your command might look something like this: `node build/index.js .../quickstart-resources/weather-server-typescript/build/index.js`
     
     **The client will:**
     
@@ -4278,10 +4202,9 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
   </Tab>
 
   <Tab title="Java">
-    <Note>
-      This is a quickstart demo based on Spring AI MCP auto-configuration and boot starters.
-      To learn how to create sync and async MCP Clients manually, consult the [Java SDK Client](/sdk/java/mcp-client) documentation
-    </Note>
+> [!NOTE]
+> This is a quickstart demo based on Spring AI MCP auto-configuration and boot starters.
+> To learn how to create sync and async MCP Clients manually, consult the [Java SDK Client](/sdk/java/mcp-client) documentation
 
     This example demonstrates how to build an interactive chatbot that combines Spring AI's Model Context Protocol (MCP) with the [Brave Search MCP Server](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/brave-search). The application creates a conversational interface powered by Anthropic's Claude AI model that can perform internet searches through Brave Search, enabling natural language interactions with real-time web data.
     [You can find the complete code for this tutorial here.](https://github.com/spring-projects/spring-ai-examples/tree/main/model-context-protocol/web-search/brave-chatbot)
@@ -4331,9 +4254,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
        ./mvnw spring-boot:run
        ```
     
-    <Warning>
-      Make sure you keep your `ANTHROPIC_API_KEY` and `BRAVE_API_KEY` keys secure!
-    </Warning>
+> [!CAUTION]
+> Make sure you keep your `ANTHROPIC_API_KEY` and `BRAVE_API_KEY` keys secure!
     
     #### How it Works
     
@@ -4407,9 +4329,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
         .build();
     ```
     
-    <Warning>
-      Breaking change: From SpringAI 1.0.0-M8 onwards, use `.defaultToolCallbacks(...)` instead of `.defaultTool(...)` to register MCP tools.
-    </Warning>
+> [!CAUTION]
+> Breaking change: From SpringAI 1.0.0-M8 onwards, use `.defaultToolCallbacks(...)` instead of `.defaultTool(...)` to register MCP tools.
     
     Key features:
     
@@ -4483,7 +4404,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     
     Now, let's create and set up your project:
     
-    <CodeGroup>
+    
       ```bash macOS/Linux
       # Create a new directory for our project
       mkdir kotlin-mcp-client
@@ -4500,7 +4421,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
       # Initialize a new kotlin project
       gradle init
       ```
-    </CodeGroup>
+    
     
     After running `gradle init`, you will be presented with options for creating your project.
     Select **Application** as the project type, **Kotlin** as the programming language, and **Java 17** as the Java version.
@@ -4509,7 +4430,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     
     After creating the project, add the following dependencies:
     
-    <CodeGroup>
+    
       ```kotlin build.gradle.kts
       val mcpVersion = "0.4.0"
       val slf4jVersion = "2.0.9"
@@ -4532,11 +4453,11 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
           implementation "com.anthropic:anthropic-java:$anthropicVersion"
       }
       ```
-    </CodeGroup>
+    
     
     Also, add the following plugins to your build script:
     
-    <CodeGroup>
+    
       ```kotlin build.gradle.kts
       plugins {
           id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -4548,7 +4469,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
           id 'com.github.johnrengelman.shadow' version '8.1.1'
       }
       ```
-    </CodeGroup>
+    
     
     #### Setting up your API key
     
@@ -4560,9 +4481,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     export ANTHROPIC_API_KEY='your-anthropic-api-key-here'
     ```
     
-    <Warning>
-      Make sure your keep your `ANTHROPIC_API_KEY` secure!
-    </Warning>
+> [!CAUTION]
+> Make sure your keep your `ANTHROPIC_API_KEY` secure!
     
     #### Creating the Client
     
@@ -4761,9 +4681,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     java -jar build/libs/<your-jar-name>.jar path/to/build/index.js # node server
     ```
     
-    <Note>
-      If you're continuing the weather tutorial from the server quickstart, your command might look something like this: `java -jar build/libs/kotlin-mcp-client-0.1.0-all.jar .../samples/weather-stdio-server/build/libs/weather-stdio-server-0.1.0-all.jar`
-    </Note>
+> [!NOTE]
+> If you're continuing the weather tutorial from the server quickstart, your command might look something like this: `java -jar build/libs/kotlin-mcp-client-0.1.0-all.jar .../samples/weather-stdio-server/build/libs/weather-stdio-server-0.1.0-all.jar`
     
     **The client will:**
     
@@ -5049,9 +4968,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     dotnet run -- path/to/server.js # node server
     ```
     
-    <Note>
-      If you're continuing the weather tutorial from the server quickstart, your command might look something like this: `dotnet run -- path/to/QuickstartWeatherServer`.
-    </Note>
+> [!NOTE]
+> If you're continuing the weather tutorial from the server quickstart, your command might look something like this: `dotnet run -- path/to/QuickstartWeatherServer`.
     
     The client will:
     
