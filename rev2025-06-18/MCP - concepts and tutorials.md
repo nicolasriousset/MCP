@@ -1313,7 +1313,7 @@ npx -y @modelcontextprotocol/server-filesystem /Users/username/Desktop /Users/us
 ```powershell Windows
 npx -y @modelcontextprotocol/server-filesystem C:\Users\username\Desktop C:\Users\username\Downloads
 ```
-    
+
 ##### Getting logs from Claude Desktop
 
 Claude.app logging related to MCP is written to log files in:
@@ -1333,7 +1333,7 @@ You can run the following command to list recent logs and follow along with any 
   ```powershell Windows
   type "%APPDATA%\Claude\logs\mcp*.log"
   ```
-    
+
 ##### Tool calls failing silently
 
 If Claude attempts to use the tools but they fail:
@@ -3137,7 +3137,7 @@ When you ask a question:
 
 ##### Claude for Desktop Integration Issues
     **Getting logs from Claude for Desktop**
-
+    
     Claude.app logging related to MCP is written to log files in `~/Library/Logs/Claude`:
     
     * `mcp.log` will contain general logging about MCP connections and connection failures.
@@ -3170,7 +3170,7 @@ When you ask a question:
 
 ##### Weather API Issues
     **Error: Failed to retrieve grid point data**
-
+    
     This usually means either:
     
     1. The coordinates are outside the US
@@ -3221,14 +3221,14 @@ npx @modelcontextprotocol/inspector <command> <arg1> <arg2>
 
 A common way to start server packages from [NPM](https://npmjs.com) or [PyPi](https://pypi.org).
 
-** NPM package **
+**NPM package**
 ```bash
 npx -y @modelcontextprotocol/inspector npx <package-name> <args>
 ### For example
 npx -y @modelcontextprotocol/inspector npx @modelcontextprotocol/server-filesystem /Users/username/Desktop
 ```
 
-** PyPi package **
+**PyPi package**
 ```bash
 npx @modelcontextprotocol/inspector uvx <package-name> <args>
 # For example
@@ -3239,12 +3239,12 @@ npx @modelcontextprotocol/inspector uvx mcp-server-git --repository ~/code/mcp/s
 
 To inspect servers locally developed or downloaded as a repository, the most common way is:
 
-** TypeScript **
+**TypeScript**
 ```bash
 npx @modelcontextprotocol/inspector node path/to/server/index.js args...
 ```
 
-** Python **
+**Python**
 ```bash
 npx @modelcontextprotocol/inspector \
   uv \
